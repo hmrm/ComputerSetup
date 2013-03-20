@@ -1,3 +1,15 @@
+;; load packages
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+
+(unless (package-installed-p 'coffee-mode)
+  (package-refresh-contents) (package-install 'coffee-mode))
+
+(unless (package-installed-p 'scala-mode2)
+  (package-refresh-contents) (package-install 'scala-mode2))
+
 ;; personal customizations
 (display-time)
 (windmove-default-keybindings)
@@ -17,6 +29,8 @@
 ;;setting up markdown mode
 (setq auto-mode-alist
         (cons '("\\.mkd" . markdown-mode) auto-mode-alist))
+(setq auto-mode-alist
+        (cons '("\\.md" . markdown-mode) auto-mode-alist))
 
 ;;getting rid of c-z
 (global-unset-key [(control z)])
