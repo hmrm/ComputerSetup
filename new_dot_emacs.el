@@ -20,7 +20,6 @@
 
 ;; personal customizations
 (display-time)
-(windmove-default-keybindings)
 
 ;;adding load path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
