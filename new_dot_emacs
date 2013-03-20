@@ -1,0 +1,23 @@
+;; personal customizations
+(display-time)
+(windmove-default-keybindings)
+
+;;adding load path
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+(add-to-list 'load-path "~/.emacs.d/emacs-for-python/")
+
+;;setting up python-for-emacs
+(require 'epy-setup)      ;; It will setup other loads, it is required!
+(require 'epy-python)     ;; If you want the python facilities [optional]
+(require 'epy-completion) ;; If you want the autocompletion settings [optional]
+(require 'epy-editing)    ;; For configurations related to editing [optional]
+(require 'epy-bindings)   ;; For my suggested keybindings [optional]
+(epy-setup-checker "pyflakes %f")
+
+;;setting up markdown mode
+(setq auto-mode-alist
+        (cons '("\\.mkd" . markdown-mode) auto-mode-alist))
+
+;;getting rid of c-z
+(global-unset-key [(control z)])
+(global-unset-key [(control x)(control z)])
