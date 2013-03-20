@@ -1,14 +1,22 @@
 ;; Load packages
 (require 'package)
+(add-to-list 'package-archives 
+    '("marmalade" .
+      "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
-(unless (package-installed-p 'coffee-mode)
-  (package-refresh-contents) (package-install 'coffee-mode))
+(when (not package-archive-contents)
+  (package-refresh-contents))
 
-(unless (package-installed-p 'scala-mode2)
-  (package-refresh-contents) (package-install 'scala-mode2))
+;; Add in your own as you wish:
+(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-js starter-kit-ruby starter-kit-eshell starter-kit-perl starter-kit-bindings coffee-mode scala-mode2 haskell-mode)
+  "A list of packages to ensure are installed at launch.")
+
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
 
 ;; personal customizations
 (display-time)
@@ -44,3 +52,7 @@
 ;;getting rid of c-z
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
+
+;;setting up haskell mode
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
