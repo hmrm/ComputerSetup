@@ -11,7 +11,7 @@
   (package-refresh-contents))
 
 ;; Add in your own as you wish:
-(defvar my-packages '(starter-kit starter-kit-lisp starter-kit-js starter-kit-ruby starter-kit-eshell starter-kit-perl starter-kit-bindings coffee-mode scala-mode2 haskell-mode flycheck ghci-completion ido-ubiquitous smex flymake-hlint erlang clojure-mode clojure-test-mode cljsbuild-mode elein nrepl slamhound slime ac-nrepl auto-complete crontab-mode mmm-mode sass-mode scss-mode less-css-mode rainbow-mode csv-mode csv-nav dired+ mic-paren json rainbow-delimiters)
+(defvar my-packages '(cl-lib starter-kit starter-kit-lisp starter-kit-js starter-kit-ruby starter-kit-eshell starter-kit-perl starter-kit-bindings coffee-mode scala-mode2 haskell-mode flycheck ghci-completion ido-ubiquitous smex flymake-hlint erlang clojure-mode clojure-test-mode cljsbuild-mode elein nrepl slamhound slime ac-nrepl auto-complete crontab-mode mmm-mode sass-mode scss-mode less-css-mode rainbow-mode csv-mode csv-nav dired+ mic-paren json rainbow-delimiters)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
