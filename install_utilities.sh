@@ -1,5 +1,4 @@
 #!/bin/bash
-sudo apt-get install curl -yq
-sudo apt-get install wget -yq
-sudo apt-get install dpkg -yq
-git clone git://github.com/lvv/git-prompt.git ~/git-prompt
+sudo apt-get install curl wget dpkg gnome-shell -yq
+cp new_dircolors ~/.dircolors
+gsettings set org.gnome.desktop.background picture-uri file://`pwd`/SimpleUbuntu.png
