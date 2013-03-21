@@ -1,14 +1,6 @@
-;; Load packages
-(require 'package)
-(add-to-list 'package-archives 
-    '("marmalade" .
-      "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(package-initialize)
+(load init-package-stuff)
+(load init-graphviz)
 
-(when (not package-archive-contents)
-  (package-refresh-contents))
 
 ;; Add in your own as you wish:
 (defvar my-packages '(cl-lib starter-kit starter-kit-lisp starter-kit-js starter-kit-ruby starter-kit-eshell starter-kit-perl starter-kit-bindings coffee-mode scala-mode2 haskell-mode flycheck ghci-completion ido-ubiquitous smex flymake-hlint erlang clojure-mode clojure-test-mode cljsbuild-mode elein nrepl slamhound slime ac-nrepl auto-complete crontab-mode mmm-mode sass-mode scss-mode less-css-mode rainbow-mode csv-mode csv-nav dired+ mic-paren json rainbow-delimiters)
@@ -26,6 +18,7 @@
    (lambda () (setq show-trailing-whitespace nil))))
 (paren-activate)
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
+(which-function-mode)
 
 ;;adding load path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
