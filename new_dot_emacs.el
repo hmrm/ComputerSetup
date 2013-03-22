@@ -1,9 +1,91 @@
-(load init-package-stuff)
-(load init-graphviz)
+;; legend: S = syntax highting I = indentation, A = autocomplete with nice keybinding, a = autocomplete functionality, D = documentation, R = repl, C = compilation, E = error checking
+;; above slash is implemented, below slash is potentially to be implented
 
+;; Setup Repositories
+(require 'package)
+(add-to-list 'package-archives 
+    '("marmalade" .
+      "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+;;setup load function
+(defun ensure-installed (my-package)
+  (unless (package-installed-p my-package)
+    (package-refresh-contents) (package-install my-package)))
+
+;;graphviz setup SIaC/E
+(ensure-installed 'graphviz-dot-mode)
+
+;;clojure setup ?SIR/?ADE
+(ensure-installed 'clojure-mode)
+(ensure-installed 'clojure-test-mode)
+(ensure-installed 'nrepl)
+(ensure-installed 'paredit)
+
+(eval-after-load "paredit"
+  '(diminish 'paredit-mode " π"))
+
+(add-hook 'clojure-mode-hook (lambda () 
+			       (clojure-test-mode) 
+			       (paredit-mode) 
+			       (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)))
+
+(add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
+(add-hood 'nrepl-mode-hook (lambda ()
+				(paredit-mode)))
+
+;;scheme setup ?SIRA/?DE
+(ensure-installed 'geiser-mode) ;should I be using scheme-complete instead?
+(ensure-installed 'company-mode)
+(add-hook 'scheme-mode-hook (lambda ()
+			      (paredit-mode)
+			      (company-mode)))
+
+;; common-lisp setup
+
+
+;; Setup scala ?SICA/?DE
+(ensure-installed 'scala-mode2)
+(add-to-list 'load-path "~/.emacs.d/ensime/elisp/")
+(require 'ensime)
+(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
+
+;; Setup javascript ?SIRE/?DA
+(ensure-installed 'js2-mode)
+
+(defvar preferred-javascript-indent-level 2)
+(setq js2-basic-offset preferred-javascript-indent-level)
+(setq js-indent-level preferred-javascript-indent-level)
+(setq javascript-indent-level preferred-javascript-indent-level)
+
+(setq auto-mode-alist
+        (cons '("\\.js\\(\\.erb\\)?\\'" . js2-mode) auto-mode-alist))
+(eval-after-load 'js2-mode '(js2-imenu-extras-setup))
+
+; js-comint not enabled, skewer also looks sweet, if I am doing a lot of javascript, consider adding those
+
+;;setup json
+(ensure-installed 'flymake-json)
+(add-auto-mode 'js-mode "\\.json\\'")
+(add-hook 'js-mode-hook 'flymake-json-maybe-load)
+
+;;setup coffee-script ?SIC/?ADE
+(ensure-installed 'coffee-mode)
+(add-hood 'coffee-mode-hook (lambda ()
+			      (set (make-local-variable 'tab-width) 2)
+			      (setq coffee-js-mode 'js2-mode)
+			      (define-key coffee-mode-map [(meta r)] 'coffee-compile-buffer)
+			      (and (file-exists-p (buffer-file-name))
+				   (file-exists-p (coffee-compiled-file-name))
+				   (coffee-cos-mode t)))) ;;compile on close
 
 ;; Add in your own as you wish:
-(defvar my-packages '(cl-lib starter-kit starter-kit-lisp starter-kit-js starter-kit-ruby starter-kit-eshell starter-kit-perl starter-kit-bindings coffee-mode scala-mode2 haskell-mode flycheck ghci-completion ido-ubiquitous smex flymake-hlint erlang clojure-mode clojure-test-mode cljsbuild-mode elein nrepl slamhound slime ac-nrepl auto-complete crontab-mode mmm-mode sass-mode scss-mode less-css-mode rainbow-mode csv-mode csv-nav dired+ mic-paren json rainbow-delimiters)
+(defvar my-packages '(cl-lib starter-kit starter-kit-lisp starter-kit-js starter-kit-ruby starter-kit-eshell starter-kit-perl starter-kit-bindings coffee-mode haskell-mode flycheck ghci-completion ido-ubiquitous smex flymake-hlint erlang auto-complete crontab-mode mmm-mode sass-mode scss-mode less-css-mode rainbow-mode csv-mode csv-nav dired+ mic-paren json rainbow-delimiters)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
@@ -19,22 +101,15 @@
 (paren-activate)
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (which-function-mode)
+(rainbow-delimiters)
 
 ;;adding load path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 (add-to-list 'load-path "~/.emacs.d/emacs-for-python/")
-(add-to-list 'load-path "~/.emacs.d/ensime/elisp/")
+
 
 ;; crontab setup
 (add-auto-mode 'crontab-mode "\\.?cron\\(tab\\)?\\'")
-
-;; load ensime
-(require 'ensime)
-
-;; This step causes the ensime-mode to be started whenever
-;; scala-mode is started for a buffer. You may have to customize this step
-;; if you're not using the standard scala mode.
-(add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
 ;;setting up python-for-emacs
 (require 'epy-setup)      ;; It will setup other loads, it is required!
@@ -100,42 +175,7 @@
 (require 'erlang-start)
 
 ;;clojure setup (from github/purcell)
-(defun slime-clojure-repl-setup ()
-  "Some REPL setup additional to that in durendal."
-  (when (string-equal (slime-lisp-implementation-name) "clojure")
-    (when (slime-inferior-process)
-      (message "Setting up repl for clojure")
-      (slime-redirect-inferior-output))
 
-    (set-syntax-table clojure-mode-syntax-table)
-    (setq lisp-indent-function 'clojure-indent-function)
-    (let (font-lock-mode)
-      (clojure-mode-font-lock-setup))))
-
-(add-hook 'slime-repl-mode-hook 'slime-clojure-repl-setup)
-
-(setq nrepl-popup-stacktraces nil)
-
-(add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
-(add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
-(eval-after-load "auto-complete"
-  '(add-to-list 'ac-modes 'nrepl-mode))
-
-(add-hook 'nrepl-mode-hook 'set-auto-complete-as-completion-at-point-function)
-(add-hook 'nrepl-interaction-mode-hook 'set-auto-complete-as-completion-at-point-function)
-(add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
-(add-hook 'nrepl-mode-hook 'subword-mode)
-(add-hook 'nrepl-mode-hook 'paredit-mode)
-(eval-after-load 'nrepl
-  '(define-key nrepl-interaction-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc))
-
-(add-hook 'nrepl-mode-hook
-          (lambda () (setq show-trailing-whitespace nil)))
-
-(add-hook 'clojure-mode-hook 'sanityinc/lisp-setup)
-(add-hook 'clojure-mode-hook 'subword-mode)
-
-(add-auto-mode 'clojure-mode "\\.cljs\\'")
 
 ;;setup auto-complete (from github/purcell)
 (require 'auto-complete-config)
