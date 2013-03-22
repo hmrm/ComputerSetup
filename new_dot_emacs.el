@@ -21,6 +21,25 @@
 ;;graphviz setup SIaC/E
 (ensure-installed 'graphviz-dot-mode)
 
+;;haskell setup
+(ensure-installed 'haskell-mode)
+(ensure-installed 'ghc)
+(ensure-installed 'ghc-completion)
+(ensure-installed 'flymake)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+
+(autoload 'ghc-init "ghc" nil t)
+(add-hood 'haskell-mode-hook (lambda ()
+			       (ghc-init)
+			       (flymake-mode)))
+
+(define-key haskell-mode-map (kbd "C-c h") 'hoogle)) ;there might be newline problems that need to be solved
+(define-key haskell-mode-map (kbd "C-x C-s") 'haskell-mode-save-buffer)
+
+(add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)			       
+
+
 ;;clojure setup ?SIR/?ADE
 (ensure-installed 'clojure-mode)
 (ensure-installed 'clojure-test-mode)
@@ -31,6 +50,7 @@
   '(diminish 'paredit-mode " π"))
 
 (add-hook 'clojure-mode-hook (lambda () 
+			       (turn-on-eldoc-mode)
 			       (clojure-test-mode) 
 			       (paredit-mode) 
 			       (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)))
@@ -43,11 +63,19 @@
 (ensure-installed 'geiser-mode) ;should I be using scheme-complete instead?
 (ensure-installed 'company-mode)
 (add-hook 'scheme-mode-hook (lambda ()
+			      (turn-on-eldoc-mode)
 			      (paredit-mode)
 			      (company-mode)))
 
 ;; common-lisp setup
-
+; the lispdoc function from https://github.com/purcell/emacs.d/blob/master/init-common-lisp.el is interesting
+(add-to-list 'auto-mode-alist '("\\.sbclrc$" . lisp-mode)) ;sbcl config file is in lisp
+(setq inferior-lisp-program "sbcl") ;use sbcl for lisp
+(load (expand-file-name "~/quicklisp/slime-helper.el")) ;load the quicklisp version of slime stuff
+(add-hook 'lisp-mode-hook (lambda ()
+			    (paredit-mode)
+			    (turn-on-eldoc-mode)
+			    (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)))
 
 ;; Setup scala ?SICA/?DE
 (ensure-installed 'scala-mode2)
@@ -102,6 +130,7 @@
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (which-function-mode)
 (rainbow-delimiters)
+(global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
 
 ;;adding load path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
@@ -128,35 +157,6 @@
 ;;getting rid of c-z
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
-
-;;setting up haskell mode
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-(define-key haskell-mode-map (kbd "C-x C-s") 'haskell-mode-save-buffer)
-
-(require 'hs-lint)    
-(require 'haskell-ac) 
-(defun my-haskell-mode-hook ()
-  "hs-lint binding, plus autocompletion and paredit."
-  (local-set-key "\C-cl" 'hs-lint)
-  (setq ac-sources
-        (append '(ac-source-yasnippet
-                  ac-source-abbrev
-                  ac-source-words-in-buffer
-                  my/ac-source-haskell)
-                ac-sources))
-  (dolist (x '(haskell literate-haskell))
-    (add-hook
-     (intern (concat (symbol-name x)
-                     "-mode-hook"))
-     'turn-on-paredit)))
-
-(eval-after-load 'haskell-mode
-  '(progn
-     (require 'flymake)
-     (push '("\\.l?hs\\'" flymake-haskell-init) flymake-allowed-file-name-masks)
-     (add-hook 'haskell-mode-hook 'flymake-haskell-enable)
-     (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)))
 
 ;;enable flycheck
 (add-hook 'prog-mode-hook 'flycheck-mode)

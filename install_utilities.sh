@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt-get install curl wget dpkg gnome-shell ack graphviz -yq
+sudo apt-get install curl wget dpkg gnome-shell ack graphviz w3m -yq
 cp new_dircolors ~/.dircolors
 gsettings set org.gnome.desktop.background picture-uri file://`pwd`/SimpleUbuntu.png
 
