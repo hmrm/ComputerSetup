@@ -1,5 +1,6 @@
 ;; legend: S = syntax highting I = indentation, A = autocomplete with nice keybinding, a = autocomplete functionality, D = documentation, R = repl, C = compilation, E = error checking
 ;; above slash is implemented, below slash is potentially to be implented
+;; this syntax is only used for a few packages, others are assumed to be at least SIAE/? unless otherwise noted
 
 ;; Setup Repositories
 (require 'package)
@@ -18,12 +19,13 @@
   (unless (package-installed-p my-package)
     (package-refresh-contents) (package-install my-package)))
 
+;;Language/Filetype Specific Setups
+
 ;;R setup
-(ensure-installed 'ess)
+(ensure-installed 'ess) ;"Emacs Speaks Statistics"
 (add-to-list 'auto-mode-alist '("\\.r" . R-mode))
 (add-to-list 'auto-mode-alist '("\\.R" . R-mode))
 (setq-default inferior-R-program-name "R")
-
 
 ;;bison/flex setup
 (autoload 'bison-mode "bison-mode.el")
@@ -50,7 +52,7 @@
 (ensure-installed 'lua-mode)
 
 ;;ocaml setup
-(ensure-installed 'tuareg)
+(ensure-installed 'tuareg) ;for reasons unclear to me, the ocaml mode is named tuareg. go figure.
 (add-to-list 'auto-mode-alist '("\\.ml[iylp]?" . tuareg-mode))
 (autoload 'tuareg-mode "tuareg" "Major mode for editing OCaml code" t) 
 (autoload 'tuareg-run-ocaml "tuareg" "Run an inferior OCaml process." t) 
@@ -64,7 +66,7 @@
 (add-to-list 'ac-modes 'go-mode)
 
 ;;go setup
-(ensure-installed 'gnugo)
+(ensure-installed 'gnugo) ;lol
 
 ;;D setup
 (ensure-installed 'd-mode)
@@ -79,17 +81,16 @@
 (add-to-list 'auto-mode-alist '("\\.rss" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.gpx" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.tcx" . nxml-mode))
-(setq magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist))
-(fset 'xml-mode 'nxml-mode)
+(fset 'xml-mode 'nxml-mode) ;this seems redundant, but why not
 (setq nxml-child-indent 4)
 (setq nxml-attribute-indent 4)
 (setq nxml-auto-insert-xml-declaration-flag nil)
-(setq nxml-bind-meta-tab-to-complete-flag t)
+(setq nxml-bind-meta-tab-to-complete-flag t) ;TODO: setup correct autocomplete keys
 (setq nxml-slash-auto-complete-flag t)
 
 ;;css setup
 (ensure-installed 'flycheck)
-(ensure-installed 'rainbow-mode)
+(ensure-installed 'rainbow-mode) ;makes color literals appear in their color
 (ensure-installed 'scss-mode)
 (ensure-installed 'less-css-mode)
 (ensure-installed 'sass-mode)
@@ -116,8 +117,6 @@
 			       (define-key haskell-mode-map (kbd "C-x C-s") 'haskell-mode-save-buffer)
 			       (flymake-mode)))
 
-
-
 (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)			       
 
 
@@ -126,10 +125,6 @@
 (ensure-installed 'clojure-test-mode)
 (ensure-installed 'nrepl)
 (ensure-installed 'paredit)
-
-(eval-after-load "paredit"
-  '(diminish 'paredit-mode " π"))
-
 (add-hook 'clojure-mode-hook (lambda () 
 			       (turn-on-eldoc-mode)
 			       (clojure-test-mode) 
@@ -140,7 +135,7 @@
 (add-hook 'nrepl-mode-hook (lambda ()
 				(paredit-mode)))
 
-;;setting up python-for-emacs
+;;setting up python-for-emacs, everything from github/gabrielanaro
 (add-to-list 'load-path "~/.emacs.d/emacs-for-python/")
 (require 'epy-setup)      ;; It will setup other loads, it is required!
 (require 'epy-python)     ;; If you want the python facilities [optional]
@@ -177,18 +172,17 @@
 (ensure-installed 'crontab-mode)
 (add-auto-mode 'crontab-mode "\\.?cron\\(tab\\)?\\'")
 
-;; Setup scala ?SICA/?DE
+;; scala setup ?SICA/?DE
 (ensure-installed 'scala-mode2)
 (add-to-list 'load-path "~/.emacs.d/ensime/elisp/")
 (require 'ensime)
 (add-hook 'scala-mode-hook 'ensime-scala-mode-hook)
 
-;; Setup javascript ?SIRE/?DA
+;; javascript setup ?SIRE/?DA
 (ensure-installed 'js2-mode)
 
 (defvar preferred-javascript-indent-level 2)
 (setq js2-basic-offset preferred-javascript-indent-level)
-(setq js-indent-level preferred-javascript-indent-level)
 (setq javascript-indent-level preferred-javascript-indent-level)
 
 (setq auto-mode-alist
@@ -201,6 +195,7 @@
 (ensure-installed 'flymake-json)
 (add-auto-mode 'js-mode "\\.json\\'")
 (add-hook 'js-mode-hook 'flymake-json-maybe-load)
+(setq js-indent-level preferred-javascript-indent-level)
 
 ;;setup coffee-script ?SIC/?ADE
 (ensure-installed 'coffee-mode)
@@ -220,10 +215,8 @@
 (setq csv-separators '("," ";" "|" " "))
 
 ;;setting markdown
-(setq auto-mode-alist
-        (cons '("\\.mkd" . markdown-mode) auto-mode-alist))
-(setq auto-mode-alist
-        (cons '("\\.md" . markdown-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.mkd" . markdown-mode))
+(setq auto-mode-alist '("\\.md" . markdown-mode))
 
 ;;setting up ruby
 ; TODO: There is significant rails support that could be added
@@ -252,7 +245,7 @@
 
 ;;erlang setup
 (unless (package-installed-p 'erlang)
-  (package-refresh-contents) (ignore-errors (package-install 'erlang)))
+  (package-refresh-contents) (ignore-errors (package-install 'erlang))) ;is the ignore-errors necessary? who knows
 (when (package-installed-p 'erlang)
   (require 'erlang-start))
 
@@ -266,18 +259,24 @@
 
 ;; personal customizations
 (ensure-installed 'dired+)
+
 (display-time)
+
 (show-trailing-whitespace)
 (dolist (hook '(term-mode-hook comint-mode-hook compilation-mode-hook))
   (add-hook hook
    (lambda () (setq show-trailing-whitespace nil))))
-(paren-activate)
+
+(paren-activate) ;TODO
+
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
-(which-function-mode)
-(rainbow-delimiters)
+(which-function-mode) ;TODO
+(rainbow-delimiters) ;makes parens et al pretty
 (global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
+(eval-after-load "paredit"
+  '(diminish 'paredit-mode " π"))
 
 ;;adding load path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
