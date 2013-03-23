@@ -1,5 +1,5 @@
 #!/bin/bash
-MANUAL_PACKAGES=""
+MANUAL_PACKAGES="cobol-mode.el bison-mode.el flex-mode.el"
 bash install_emacs.sh
 mkdir ~/.emacs.d
 mkdir ~/.emacs.d/lisp

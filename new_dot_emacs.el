@@ -18,6 +18,42 @@
   (unless (package-installed-p my-package)
     (package-refresh-contents) (package-install my-package)))
 
+;;R setup
+(ensure-installed 'ess)
+(add-to-list 'auto-mode-alist '("\\.r" . R-mode))
+(add-to-list 'auto-mode-alist '("\\.R" . R-mode))
+(setq-default inferior-R-program-name "R")
+
+
+;;bison/flex setup
+(autoload 'bison-mode "bison-mode.el")
+(add-to-list 'auto-mode-alist '("\\.y$" . bison-mode))
+(autoload 'flex-mode "flex-mode.el")
+(add-to-list 'auto-mode-alist '("\\.l$" . flex-mode))
+
+;;php setup
+(ensure-installed 'php-mode)
+(ensure-installed 'php-extras)
+(add-to-list 'ac-modes 'php-mode)
+(add-hook 'php-mode-hook (lambda ()
+			   (eldoc-mode)))
+
+;;fortran setup
+(ensure-installed f90-interface-browser) ;god save me if I actually have to use this
+
+;;yaml setup
+(ensure-installed 'yaml-mode)
+
+;;lua setup
+(ensure-installed 'lua-mode)
+
+;;ocaml setup
+(ensure-installed 'tuareg-mode)
+(add-to-list 'auto-mode-alist '("\\.ml[iylp]?" . tuareg-mode))
+(autoload 'tuareg-mode "tuareg" "Major mode for editing OCaml code" t) 
+(autoload 'tuareg-run-ocaml "tuareg" "Run an inferior OCaml process." t) 
+(autoload 'ocamldebug "ocamldebug" "Run the OCaml debugger" t)
+
 ;;sql setup
 (ensure-installed 'sql-indent)
 
@@ -208,6 +244,12 @@
 			    (ruby-end-mode)
 			    (robe-mode)
 			    (push 'ac-source-robe ac-sources)))
+
+;;erlang setup
+(unless (package-installed-p 'erlang)
+  (package-refresh-contents) (ignore-errors (package-install 'erlang)))
+(when (package-installed-p 'erlang)
+  (require 'erlang-start))
 
 ;; Add in your own as you wish:
 (defvar my-packages '(cl-lib ido-ubiquitous smex erlang mic-paren)
