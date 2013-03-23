@@ -34,12 +34,14 @@
 ;;php setup
 (ensure-installed 'php-mode)
 (ensure-installed 'php-extras)
+(ensure-installed 'auto-complete)
+(require 'auto-complete)
 (add-to-list 'ac-modes 'php-mode)
 (add-hook 'php-mode-hook (lambda ()
 			   (eldoc-mode)))
 
 ;;fortran setup
-(ensure-installed f90-interface-browser) ;god save me if I actually have to use this
+(ensure-installed 'f90-interface-browser) ;god save me if I actually have to use this
 
 ;;yaml setup
 (ensure-installed 'yaml-mode)
@@ -48,7 +50,7 @@
 (ensure-installed 'lua-mode)
 
 ;;ocaml setup
-(ensure-installed 'tuareg-mode)
+(ensure-installed 'tuareg)
 (add-to-list 'auto-mode-alist '("\\.ml[iylp]?" . tuareg-mode))
 (autoload 'tuareg-mode "tuareg" "Major mode for editing OCaml code" t) 
 (autoload 'tuareg-run-ocaml "tuareg" "Run an inferior OCaml process." t) 
@@ -68,13 +70,15 @@
 (ensure-installed 'd-mode)
 
 ;;xml/html setup
-(add-auto-mode
- 'nxml-mode
- (concat "\\."
-         (regexp-opt
-          '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss"
-            "gpx" "tcx"))
-         "\\'"))
+(add-to-list 'auto-mode-alist '("\\.xml" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.xsd" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.sch" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.rng" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.xslt" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.svg" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.rss" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.gpx" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.tcx" . nxml-mode))
 (setq magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist))
 (fset 'xml-mode 'nxml-mode)
 (setq nxml-child-indent 4)
@@ -100,18 +104,19 @@
 ;;haskell setup
 (ensure-installed 'haskell-mode)
 (ensure-installed 'ghc)
-(ensure-installed 'ghc-completion)
+(ensure-installed 'ghci-completion)
 (ensure-installed 'flymake)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
 (autoload 'ghc-init "ghc" nil t)
-(add-hood 'haskell-mode-hook (lambda ()
+(add-hook 'haskell-mode-hook (lambda ()
 			       (ghc-init)
+			       (define-key haskell-mode-map (kbd "C-c h") 'hoogle)
+			       (define-key haskell-mode-map (kbd "C-x C-s") 'haskell-mode-save-buffer)
 			       (flymake-mode)))
 
-(define-key haskell-mode-map (kbd "C-c h") 'hoogle)) ;there might be newline problems that need to be solved
-(define-key haskell-mode-map (kbd "C-x C-s") 'haskell-mode-save-buffer)
+
 
 (add-hook 'inferior-haskell-mode-hook 'turn-on-ghci-completion)			       
 
@@ -132,7 +137,7 @@
 			       (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)))
 
 (add-hook 'nrepl-interaction-mode-hook 'nrepl-turn-on-eldoc-mode)
-(add-hood 'nrepl-mode-hook (lambda ()
+(add-hook 'nrepl-mode-hook (lambda ()
 				(paredit-mode)))
 
 ;;setting up python-for-emacs
@@ -277,58 +282,58 @@
 ;;adding load path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
-;;ido mode setup
-(ido-mode t)  ; use 'buffer rather than t to use only buffer switching
-(ido-everywhere t)
-(ido-ubiquitous-mode t)
-(setq ido-enable-flex-matching t)
-(setq ido-use-filename-at-point nil)
-(setq ido-auto-merge-work-directories-length 0)
-(setq ido-use-virtual-buffers t)
+;; ;;ido mode setup
+;; (ido-mode t)  ; use 'buffer rather than t to use only buffer switching
+;; (ido-everywhere t)
+;; (ido-ubiquitous-mode t)
+;; (setq ido-enable-flex-matching t)
+;; (setq ido-use-filename-at-point nil)
+;; (setq ido-auto-merge-work-directories-length 0)
+;; (setq ido-use-virtual-buffers t)
 
-;;setup auto-complete (from github/purcell)
-(require 'auto-complete-config)
-(global-auto-complete-mode t)
-(setq ac-expand-on-auto-complete nil)
-(setq ac-auto-start nil)
-(setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
-(define-key ac-completing-map (kbd "C-n") 'ac-next)
-(define-key ac-completing-map (kbd "C-p") 'ac-previous)
+;; ;;setup auto-complete (from github/purcell)
+;; (require 'auto-complete-config)
+;; (global-auto-complete-mode t)
+;; (setq ac-expand-on-auto-complete nil)
+;; (setq ac-auto-start nil)
+;; (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
+;; (define-key ac-completing-map (kbd "C-n") 'ac-next)
+;; (define-key ac-completing-map (kbd "C-p") 'ac-previous)
 
-(setq tab-always-indent 'complete)  ;; use 't when auto-complete is disabled
-(add-to-list 'completion-styles 'initials t)
+;; (setq tab-always-indent 'complete)  ;; use 't when auto-complete is disabled
+;; (add-to-list 'completion-styles 'initials t)
 
-(defun set-auto-complete-as-completion-at-point-function ()
-  (setq completion-at-point-functions '(auto-complete)))
-(add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
-
-
-(set-default 'ac-sources
-             '(ac-source-imenu
-               ac-source-dictionary
-               ac-source-words-in-buffer
-               ac-source-words-in-same-mode-buffers
-               ac-source-words-in-all-buffer))
-
-(dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
-                sass-mode yaml-mode csv-mode espresso-mode haskell-mode
-                html-mode nxml-mode sh-mode smarty-mode clojure-mode
-                lisp-mode textile-mode markdown-mode tuareg-mode
-                js3-mode css-mode less-css-mode sql-mode))
-  (add-to-list 'ac-modes mode))
+;; (defun set-auto-complete-as-completion-at-point-function ()
+;;   (setq completion-at-point-functions '(auto-complete)))
+;; (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 
 
-(defun sanityinc/dabbrev-friend-buffer (other-buffer)
-  (< (buffer-size other-buffer) (* 1 1024 1024)))
+;; (set-default 'ac-sources
+;;              '(ac-source-imenu
+;;                ac-source-dictionary
+;;                ac-source-words-in-buffer
+;;                ac-source-words-in-same-mode-buffers
+;;                ac-source-words-in-all-buffer))
 
-(setq dabbrev-friend-buffer-function 'sanityinc/dabbrev-friend-buffer)
+;; (dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
+;;                 sass-mode yaml-mode csv-mode espresso-mode haskell-mode
+;;                 html-mode nxml-mode sh-mode smarty-mode clojure-mode
+;;                 lisp-mode textile-mode markdown-mode tuareg-mode
+;;                 js3-mode css-mode less-css-mode sql-mode))
+;;   (add-to-list 'ac-modes mode))
 
-;; hippie expand setup
-(global-set-key (kbd "M-/") 'hippie-expand)
 
-(setq hippie-expand-try-functions-list
-      '(try-complete-file-name-partially
-        try-complete-file-name
-        try-expand-dabbrev
-        try-expand-dabbrev-all-buffers
-        try-expand-dabbrev-from-kill))
+;; (defun sanityinc/dabbrev-friend-buffer (other-buffer)
+;;   (< (buffer-size other-buffer) (* 1 1024 1024)))
+
+;; (setq dabbrev-friend-buffer-function 'sanityinc/dabbrev-friend-buffer)
+
+;; ;; hippie expand setup
+;; (global-set-key (kbd "M-/") 'hippie-expand)
+
+;; (setq hippie-expand-try-functions-list
+;;       '(try-complete-file-name-partially
+;;         try-complete-file-name
+;;         try-expand-dabbrev
+;;         try-expand-dabbrev-all-buffers
+;;         try-expand-dabbrev-from-kill))
