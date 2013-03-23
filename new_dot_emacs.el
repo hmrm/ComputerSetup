@@ -18,6 +18,46 @@
   (unless (package-installed-p my-package)
     (package-refresh-contents) (package-install my-package)))
 
+;;sql setup
+(ensure-installed 'sql-indent)
+
+;;golang setup
+(ensure-installed 'go-mode)
+(add-to-list 'ac-modes 'go-mode)
+
+;;go setup
+(ensure-installed 'gnugo)
+
+;;D setup
+(ensure-installed 'd-mode)
+
+;;xml/html setup
+(add-auto-mode
+ 'nxml-mode
+ (concat "\\."
+         (regexp-opt
+          '("xml" "xsd" "sch" "rng" "xslt" "svg" "rss"
+            "gpx" "tcx"))
+         "\\'"))
+(setq magic-mode-alist (cons '("<\\?xml " . nxml-mode) magic-mode-alist))
+(fset 'xml-mode 'nxml-mode)
+(setq nxml-child-indent 4)
+(setq nxml-attribute-indent 4)
+(setq nxml-auto-insert-xml-declaration-flag nil)
+(setq nxml-bind-meta-tab-to-complete-flag t)
+(setq nxml-slash-auto-complete-flag t)
+
+;;css setup
+(ensure-installed 'flycheck)
+(ensure-installed 'rainbow-mode)
+(ensure-installed 'scss-mode)
+(ensure-installed 'less-css-mode)
+(ensure-installed 'sass-mode)
+(add-hook 'css-mode-hook (lambda ()
+			   (rainbow-mode)
+			   (flycheck-mode)))
+
+
 ;;graphviz setup SIaC/E
 (ensure-installed 'graphviz-dot-mode)
 
@@ -59,7 +99,17 @@
 (add-hood 'nrepl-mode-hook (lambda ()
 				(paredit-mode)))
 
+;;setting up python-for-emacs
+(add-to-list 'load-path "~/.emacs.d/emacs-for-python/")
+(require 'epy-setup)      ;; It will setup other loads, it is required!
+(require 'epy-python)     ;; If you want the python facilities [optional]
+(require 'epy-completion) ;; If you want the autocompletion settings [optional]
+(require 'epy-editing)    ;; For configurations related to editing [optional]
+(require 'epy-bindings)   ;; For my suggested keybindings [optional]
+(epy-setup-checker "pyflakes %f")
+
 ;;scheme setup ?SIRA/?DE
+(ensure-installed 'paredit)
 (ensure-installed 'geiser-mode) ;should I be using scheme-complete instead?
 (ensure-installed 'company-mode)
 (add-hook 'scheme-mode-hook (lambda ()
@@ -69,6 +119,7 @@
 
 ;; common-lisp setup
 ; the lispdoc function from https://github.com/purcell/emacs.d/blob/master/init-common-lisp.el is interesting
+(ensure-installed 'paredit)
 (add-to-list 'auto-mode-alist '("\\.sbclrc$" . lisp-mode)) ;sbcl config file is in lisp
 (setq inferior-lisp-program "sbcl") ;use sbcl for lisp
 (load (expand-file-name "~/quicklisp/slime-helper.el")) ;load the quicklisp version of slime stuff
@@ -76,6 +127,14 @@
 			    (paredit-mode)
 			    (turn-on-eldoc-mode)
 			    (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)))
+
+;;perl setup
+(ensure-installed 'cperl-mode)
+(defalias 'perl-mode 'cperl-mode)
+
+;; crontab setup
+(ensure-installed 'crontab-mode)
+(add-auto-mode 'crontab-mode "\\.?cron\\(tab\\)?\\'")
 
 ;; Setup scala ?SICA/?DE
 (ensure-installed 'scala-mode2)
@@ -104,7 +163,7 @@
 
 ;;setup coffee-script ?SIC/?ADE
 (ensure-installed 'coffee-mode)
-(add-hood 'coffee-mode-hook (lambda ()
+(add-hook 'coffee-mode-hook (lambda ()
 			      (set (make-local-variable 'tab-width) 2)
 			      (setq coffee-js-mode 'js2-mode)
 			      (define-key coffee-mode-map [(meta r)] 'coffee-compile-buffer)
@@ -112,8 +171,46 @@
 				   (file-exists-p (coffee-compiled-file-name))
 				   (coffee-cos-mode t)))) ;;compile on close
 
+;; csv mode setup
+(ensure-installed 'csv-mode)
+(ensure-installed 'csv-nav)
+(add-auto-mode 'csv-mode "\\.[Cc][Ss][Vv]\\'")
+(autoload 'csv-nav-mode "csv-nav" "Major mode for navigating comma-separated value files." t)
+(setq csv-separators '("," ";" "|" " "))
+
+;;setting markdown
+(setq auto-mode-alist
+        (cons '("\\.mkd" . markdown-mode) auto-mode-alist))
+(setq auto-mode-alist
+        (cons '("\\.md" . markdown-mode) auto-mode-alist))
+
+;;setting up ruby
+; TODO: There is significant rails support that could be added
+(add-to-list 'auto-mode-alist '("\\.rake\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.gemspec\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.ru\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Guardfile\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Capfile\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.thor\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Thorfile\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Vagrantfile\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.jbuilder\\'" . ruby-mode))
+(ensure-installed 'yari)
+(ensure-installed 'ruby-inf)
+(ensure-installed 'ruby-end)
+(ensure-installed 'robe)
+(ensure-installed 'auto-complete)
+(add-to-list 'ac-modes 'ruby-mode)
+(add-hook 'ruby-mode-hook (lambda ()
+			    (inf-ruby-setup-keybindings)
+			    (ruby-end-mode)
+			    (robe-mode)
+			    (push 'ac-source-robe ac-sources)))
+
 ;; Add in your own as you wish:
-(defvar my-packages '(cl-lib starter-kit starter-kit-lisp starter-kit-js starter-kit-ruby starter-kit-eshell starter-kit-perl starter-kit-bindings coffee-mode haskell-mode flycheck ghci-completion ido-ubiquitous smex flymake-hlint erlang auto-complete crontab-mode mmm-mode sass-mode scss-mode less-css-mode rainbow-mode csv-mode csv-nav dired+ mic-paren json rainbow-delimiters)
+(defvar my-packages '(cl-lib ido-ubiquitous smex erlang mic-paren)
   "A list of packages to ensure are installed at launch.")
 
 (dolist (p my-packages)
@@ -121,6 +218,7 @@
     (package-install p)))
 
 ;; personal customizations
+(ensure-installed 'dired+)
 (display-time)
 (show-trailing-whitespace)
 (dolist (hook '(term-mode-hook comint-mode-hook compilation-mode-hook))
@@ -131,36 +229,11 @@
 (which-function-mode)
 (rainbow-delimiters)
 (global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
-
-;;adding load path
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-(add-to-list 'load-path "~/.emacs.d/emacs-for-python/")
-
-
-;; crontab setup
-(add-auto-mode 'crontab-mode "\\.?cron\\(tab\\)?\\'")
-
-;;setting up python-for-emacs
-(require 'epy-setup)      ;; It will setup other loads, it is required!
-(require 'epy-python)     ;; If you want the python facilities [optional]
-(require 'epy-completion) ;; If you want the autocompletion settings [optional]
-(require 'epy-editing)    ;; For configurations related to editing [optional]
-(require 'epy-bindings)   ;; For my suggested keybindings [optional]
-(epy-setup-checker "pyflakes %f")
-
-;;setting up markdown mode
-(setq auto-mode-alist
-        (cons '("\\.mkd" . markdown-mode) auto-mode-alist))
-(setq auto-mode-alist
-        (cons '("\\.md" . markdown-mode) auto-mode-alist))
-
-;;getting rid of c-z
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
 
-;;enable flycheck
-(add-hook 'prog-mode-hook 'flycheck-mode)
-(add-hook 'text-mode-hook 'flycheck-mode)
+;;adding load path
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 
 ;;ido mode setup
 (ido-mode t)  ; use 'buffer rather than t to use only buffer switching
@@ -170,12 +243,6 @@
 (setq ido-use-filename-at-point nil)
 (setq ido-auto-merge-work-directories-length 0)
 (setq ido-use-virtual-buffers t)
-
-;;erlang setup
-(require 'erlang-start)
-
-;;clojure setup (from github/purcell)
-
 
 ;;setup auto-complete (from github/purcell)
 (require 'auto-complete-config)
@@ -213,95 +280,6 @@
   (< (buffer-size other-buffer) (* 1 1024 1024)))
 
 (setq dabbrev-friend-buffer-function 'sanityinc/dabbrev-friend-buffer)
-
-;;common-lisp startup (purcell) lispdoc from From http://bc.tech.coop/blog/070515.html
-(add-auto-mode 'lisp-mode "\\.cl\\'")
-(add-hook 'lisp-mode-hook (lambda ()
-                            (cond ((not (featurep 'slime))
-                                   (require 'slime)
-                                   (normal-mode)))))
-
-(eval-after-load 'slime
-  '(progn
-     (add-to-list 'slime-lisp-implementations
-		    '(sbcl ("sbcl") :coding-system utf-8-unix))
-     (add-to-list 'slime-lisp-implementations
-		    '(cmucl ("lisp") :coding-system iso-latin-1-unix))))
-
-(defun lispdoc ()
-  "Searches lispdoc.com for SYMBOL, which is by default the symbol currently under the curser"
-  (interactive)
-  (let* ((word-at-point (word-at-point))
-         (symbol-at-point (symbol-at-point))
-         (default (symbol-name symbol-at-point))
-         (inp (read-from-minibuffer
-               (if (or word-at-point symbol-at-point)
-                   (concat "Symbol (default " default "): ")
-                 "Symbol (no default): "))))
-    (if (and (string= inp "") (not word-at-point) (not
-                                                   symbol-at-point))
-        (message "you didn't enter a symbol!")
-      (let ((search-type (read-from-minibuffer
-                          "full-text (f) or basic (b) search (default b)? ")))
-        (browse-url (concat "http://lispdoc.com?q="
-                            (if (string= inp "")
-                                default
-                              inp)
-                            "&search="
-                            (if (string-equal search-type "f")
-                                "full+text+search"
-                              "basic+search")))))))
-
-(define-key lisp-mode-map (kbd "C-c l") 'lispdoc)
-
-;; css setup
-(eval-after-load 'mmm-vars
-  '(progn
-     (mmm-add-group
-      'html-css
-      '((css-cdata
-         :submode css-mode
-         :face mmm-code-submode-face
-         :front "<style[^>]*>[ \t\n]*\\(//\\)?<!\\[CDATA\\[[ \t]*\n?"
-         :back "[ \t]*\\(//\\)?]]>[ \t\n]*</style>"
-         :insert ((?j js-tag nil @ "<style type=\"text/css\">"
-                      @ "\n" _ "\n" @ "</script>" @)))
-        (css
-         :submode css-mode
-         :face mmm-code-submode-face
-         :front "<style[^>]*>[ \t]*\n?"
-         :back "[ \t]*</style>"
-         :insert ((?j js-tag nil @ "<style type=\"text/css\">"
-                      @ "\n" _ "\n" @ "</style>" @)))
-        (css-inline
-         :submode css-mode
-         :face mmm-code-submode-face
-         :front "style=\""
-         :back "\"")))
-     (dolist (mode (list 'html-mode 'nxml-mode))
-       (mmm-add-mode-ext-class mode "\\.r?html\\(\\.erb\\)?\\'" 'html-css))))
-
-(eval-after-load 'rainbow-mode
-  '(dolist (hook '(css-mode-hook html-mode-hook sass-mode-hook))
-     (add-hook hook 'rainbow-mode)))
-
-(eval-after-load 'auto-complete
-  '(progn
-     (dolist (hook '(css-mode-hook sass-mode-hook scss-mode-hook))
-       (add-hook hook 'ac-css-mode-setup))))
-
-;; csv mode setup
-(add-auto-mode 'csv-mode "\\.[Cc][Ss][Vv]\\'")
-(autoload 'csv-nav-mode "csv-nav" "Major mode for navigating comma-separated value files." t)
-
-(setq csv-separators '("," ";" "|" " "))
-
-;; dired setup
-(eval-after-load 'dired
-  '(progn
-     (require 'dired+)
-     (setq dired-recursive-deletes 'top)
-     (define-key dired-mode-map [mouse-2] 'dired-find-file)))
 
 ;; hippie expand setup
 (global-set-key (kbd "M-/") 'hippie-expand)

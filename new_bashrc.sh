@@ -128,6 +128,6 @@ emacs --daemon
 EDITOR="emacsclient -c"
 
 #setting up path
-PATH=$PATH:~/.scala/bin
+PATH=$PATH:~/.scala/bin:~/go/bin
 
 [[ $- == *i* ]]   &&   . ~/git-prompt/git-prompt.sh
