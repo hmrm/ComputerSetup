@@ -278,27 +278,18 @@
 (when (package-installed-p 'erlang)
   (require 'erlang-start))
 
-;; Add in your own as you wish:
-(defvar my-packages '(cl-lib ido-ubiquitous smex erlang mic-paren)
-  "A list of packages to ensure are installed at launch.")
-
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
-
 ;; personal customizations
 (ensure-installed 'dired+)
 
-(display-time)
+(display-time-mode 1)
 
 (show-trailing-whitespace)
 (dolist (hook '(term-mode-hook comint-mode-hook compilation-mode-hook))
   (add-hook hook
    (lambda () (setq show-trailing-whitespace nil))))
 
-(paren-activate) ;TODO
-(which-function-mode) ;TODO
-(rainbow-delimiters) ;makes parens et al pretty
+(which-function-mode 1) ;TODO
+(rainbow-delimiters 1) ;makes parens et al pretty
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
 
@@ -508,3 +499,11 @@ indent yanked text (with prefix arg don't indent)."
 
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 (global-set-key (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+
+;;setup hippie expand
+(setq hippie-expand-try-functions-list
+      '(try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-dabbrev
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill))
