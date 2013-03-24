@@ -19,6 +19,35 @@
   (unless (package-installed-p my-package)
     (package-refresh-contents) (package-install my-package)))
 
+;;autocomplete setup
+(ensure-installed 'auto-complete)
+(require 'auto-complete-config)
+(global-auto-complete-mode t)
+(setq ac-expand-on-auto-complete nil)
+(setq ac-auto-start nil)
+(setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
+(define-key ac-completing-map (kbd "C-n") 'ac-next)
+(define-key ac-completing-map (kbd "C-p") 'ac-previous)
+
+(setq tab-always-indent 'complete)  ;; use 't when auto-complete is disabled
+(add-to-list 'completion-styles 'initials t)
+
+(defun set-auto-complete-as-completion-at-point-function ()
+  (setq completion-at-point-functions '(auto-complete)))
+(add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+(set-default 'ac-sources
+             '(ac-source-imenu
+               ac-source-dictionary
+               ac-source-words-in-buffer
+               ac-source-words-in-same-mode-buffers
+               ac-source-words-in-all-buffer))
+
+;;All programming language setup
+(ensure-installed 'flycheck)
+(add-hook 'prog-mode-hook (lambda ()
+			    (flyspell-prog-mode)
+			    (flycheck-mode))) ;TODO: test this
+
 ;;Language/Filetype Specific Setups
 
 ;;R setup
@@ -268,71 +297,214 @@
    (lambda () (setq show-trailing-whitespace nil))))
 
 (paren-activate) ;TODO
-
-(global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (which-function-mode) ;TODO
 (rainbow-delimiters) ;makes parens et al pretty
-(global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
+
+(ensure-installed 'diminish)
+(require 'diminish)
 (eval-after-load "paredit"
   '(diminish 'paredit-mode " π"))
 
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+(setq uniquify-separator "/")
+(setq uniquify-after-kill-buffer-p t)    ; rename after killing uniquified
+(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+
+(ensure-installed 'ack-and-a-half)
+(defalias 'ack 'ack-and-a-half)
+(defalias 'ack-same 'ack-and-a-half-same)
+(defalias 'ack-find-file 'ack-and-a-half-find-file)
+(defalias 'ack-find-file-same 'ack-and-a-half-find-file-same)
+
+(require 'midnight)
+(winner-mode 1) ; TODO: get comfortable with this
+(ensure-installed 'gist)
+(ensure-installed 'guru-mode)
+(require 'guru-mode)
+
+(ensure-installed 'ido-ubiquitous)
+(ensure-installed 'smex)
+(ido-mode t)  ; use 'buffer rather than t to use only buffer switching
+(ido-everywhere t)
+(ido-ubiquitous-mode t)
+(setq ido-enable-flex-matching t)
+(setq ido-use-filename-at-point nil)
+(setq ido-auto-merge-work-directories-length 0)
+(setq ido-use-virtual-buffers t)
+
+(smex-initialize)
+(global-set-key "\M-x" 'smex)
+
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
+(put 'narrow-to-defun 'disabled nil)
+
+(ensure-installed 'volatile-highlights) ;TODO: check if I like this
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
+(diminish 'volatile-highlights-mode)
+
+(ensure-installed 'pointback-mode)
+(global-pointback-mode)
+
+(ensure-installed 'ace-jump-mode)
+(ensure-installed 'multiple-cursors)
 ;;adding load path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
-;; ;;ido mode setup
-;; (ido-mode t)  ; use 'buffer rather than t to use only buffer switching
-;; (ido-everywhere t)
-;; (ido-ubiquitous-mode t)
-;; (setq ido-enable-flex-matching t)
-;; (setq ido-use-filename-at-point nil)
-;; (setq ido-auto-merge-work-directories-length 0)
-;; (setq ido-use-virtual-buffers t)
+;;setup auto-save directory
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 
-;; ;;setup auto-complete (from github/purcell)
-;; (require 'auto-complete-config)
-;; (global-auto-complete-mode t)
-;; (setq ac-expand-on-auto-complete nil)
-;; (setq ac-auto-start nil)
-;; (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
-;; (define-key ac-completing-map (kbd "C-n") 'ac-next)
-;; (define-key ac-completing-map (kbd "C-p") 'ac-previous)
+;;setup scripting
+(add-hook 'after-save-hook
+          'executable-make-buffer-file-executable-if-script-p)
 
-;; (setq tab-always-indent 'complete)  ;; use 't when auto-complete is disabled
-;; (add-to-list 'completion-styles 'initials t)
+;;setup re-builder
+(require 're-builder)
+(setq reb-re-syntax 'string)
 
-;; (defun set-auto-complete-as-completion-at-point-function ()
-;;   (setq completion-at-point-functions '(auto-complete)))
-;; (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+;;windows setup
+(require 'windmove)
+(windmove-default-keybindings)
+
+(defun split-window-func-with-other-buffer (split-function)
+  (lexical-let ((s-f split-function))
+    (lambda ()
+      (interactive)
+      (funcall s-f)
+      (set-window-buffer (next-window) (other-buffer)))))
+
+(global-set-key "\C-x2" (split-window-func-with-other-buffer 'split-window-vertically))
+(global-set-key "\C-x3" (split-window-func-with-other-buffer 'split-window-horizontally))
+
+(defun split-window-horizontally-instead ()
+  (interactive)
+  (save-excursion
+    (delete-other-windows)
+    (funcall (split-window-func-with-other-buffer 'split-window-horizontally))))
+
+(defun split-window-vertically-instead ()
+  (interactive)
+  (save-excursion
+    (delete-other-windows)
+    (funcall (split-window-func-with-other-buffer 'split-window-vertically))))
 
 
-;; (set-default 'ac-sources
-;;              '(ac-source-imenu
-;;                ac-source-dictionary
-;;                ac-source-words-in-buffer
-;;                ac-source-words-in-same-mode-buffers
-;;                ac-source-words-in-all-buffer))
 
-;; (dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
-;;                 sass-mode yaml-mode csv-mode espresso-mode haskell-mode
-;;                 html-mode nxml-mode sh-mode smarty-mode clojure-mode
-;;                 lisp-mode textile-mode markdown-mode tuareg-mode
-;;                 js3-mode css-mode less-css-mode sql-mode))
-;;   (add-to-list 'ac-modes mode))
+;;yank setup
+(defvar yank-indent-modes
+  '(LaTeX-mode TeX-mode)
+  "Modes in which to indent regions that are yanked (or yank-popped).
+Only modes that don't derive from `prog-mode' should be listed here.")
+
+(defvar yank-indent-blacklisted-modes
+  '(python-mode slim-mode haml-mode)
+  "Modes for which auto-indenting is suppressed.")
+
+(defvar yank-advised-indent-threshold 1000
+  "Threshold (# chars) over which indentation does not automatically occur.")
+
+(defun yank-advised-indent-function (beg end)
+  "Do indentation, as long as the region isn't too large."
+  (if (<= (- end beg) yank-advised-indent-threshold)
+      (indent-region beg end nil)))
+
+(defadvice yank (after yank-indent activate)
+  "If current mode is one of 'yank-indent-modes,
+indent yanked text (with prefix arg don't indent)."
+  (if (and (not (ad-get-arg 0))
+           (not (member major-mode yank-indent-blacklisted-modes))
+           (or (derived-mode-p 'prog-mode)
+               (member major-mode yank-indent-modes)))
+      (let ((transient-mark-mode nil))
+    (yank-advised-indent-function (region-beginning) (region-end)))))
+
+(defadvice yank-pop (after yank-pop-indent activate)
+  "If current mode is one of 'yank-indent-modes,
+indent yanked text (with prefix arg don't indent)."
+  (if (and (not (ad-get-arg 0))
+           (not (member major-mode yank-indent-blacklisted-modes))
+           (or (derived-mode-p 'prog-mode)
+               (member major-mode yank-indent-modes)))
+    (let ((transient-mark-mode nil))
+    (yank-advised-indent-function (region-beginning) (region-end)))))
+
+;;setup symbol jumping
+(defun prelude-ido-goto-symbol (&optional symbol-list)
+  "Refresh imenu and jump to a place in the buffer using Ido."
+  (interactive)
+  (unless (featurep 'imenu)
+    (require 'imenu nil t))
+  (cond
+   ((not symbol-list)
+    (let ((ido-mode ido-mode)
+          (ido-enable-flex-matching
+           (if (boundp 'ido-enable-flex-matching)
+               ido-enable-flex-matching t))
+          name-and-pos symbol-names position)
+      (unless ido-mode
+        (ido-mode 1)
+        (setq ido-enable-flex-matching t))
+      (while (progn
+               (imenu--cleanup)
+               (setq imenu--index-alist nil)
+               (prelude-ido-goto-symbol (imenu--make-index-alist))
+               (setq selected-symbol
+                     (ido-completing-read "Symbol? " symbol-names))
+               (string= (car imenu--rescan-item) selected-symbol)))
+      (unless (and (boundp 'mark-active) mark-active)
+        (push-mark nil t nil))
+      (setq position (cdr (assoc selected-symbol name-and-pos)))
+      (cond
+       ((overlayp position)
+        (goto-char (overlay-start position)))
+       (t
+        (goto-char position)))))
+   ((listp symbol-list)
+    (dolist (symbol symbol-list)
+      (let (name position)
+        (cond
+         ((and (listp symbol) (imenu--subalist-p symbol))
+          (prelude-ido-goto-symbol symbol))
+         ((listp symbol)
+          (setq name (car symbol))
+          (setq position (cdr symbol)))
+         ((stringp symbol)
+          (setq name symbol)
+          (setq position
+                (get-text-property 1 'org-imenu-marker symbol))))
+        (unless (or (null position) (null name)
+                    (string= (car imenu--rescan-item) name))
+          (add-to-list 'symbol-names (substring-no-properties name))
+          (add-to-list 'name-and-pos (cons (substring-no-properties name) position))))))))
 
 
-;; (defun sanityinc/dabbrev-friend-buffer (other-buffer)
-;;   (< (buffer-size other-buffer) (* 1 1024 1024)))
+(global-set-key (kbd "C-c i") 'prelude-ido-goto-symbol) ;TODO: test this
 
-;; (setq dabbrev-friend-buffer-function 'sanityinc/dabbrev-friend-buffer)
+;;setup keybindings
+(global-set-key (kbd "C-x C-m") 'execute-extended-command)
+(global-set-key (kbd "RET") 'reindent-then-newline-and-indent)
+(global-set-key "\C-x|" 'split-window-horizontally-instead)
+(global-set-key "\C-x_" 'split-window-vertically-instead)
+(global-set-key (kbd "C-x \\") 'align-regexp)
+(global-set-key (kbd "C-x m") 'eshell)
+(global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+(global-set-key (kbd "C-x M-m") 'shell)
 
-;; ;; hippie expand setup
-;; (global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-h C-f") 'find-function)
+(global-set-key (kbd "C-h C-k") 'find-function-on-key)
+(global-set-key (kbd "C-h C-v") 'find-variable)
+(global-set-key (kbd "C-h C-l") 'find-library)
 
-;; (setq hippie-expand-try-functions-list
-;;       '(try-complete-file-name-partially
-;;         try-complete-file-name
-;;         try-expand-dabbrev
-;;         try-expand-dabbrev-all-buffers
-;;         try-expand-dabbrev-from-kill))
+(global-set-key (kbd "M-/") 'hippie-expand)
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+(global-set-key (kbd "C-c SPC") 'ace-jump-mode)
+(global-set-key (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
