@@ -127,9 +127,11 @@ _seq ()
 EDITOR="emacsclient -c"
 
 #setting up path
-PATH=$PATH:~/.scala/bin:~/go/bin
+PATH=$PATH:~/.scala/bin:~/ComputerSetup/go/bin
 
 [[ $- == *i* ]]   &&   . ~/git-prompt/git-prompt.sh
 
 #screw rvm and screw the profile/bashrc system
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+xmodmap ~/.xmodmap
