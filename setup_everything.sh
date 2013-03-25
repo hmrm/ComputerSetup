@@ -25,7 +25,6 @@ sudo bash install_go.sh
 bash install_node.sh
 bash install_scala.sh
 bash install_ruby.sh
-bash ssh_setup.sh
 
 #Depends on more
 bash install_css_stuff.sh
