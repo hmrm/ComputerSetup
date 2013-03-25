@@ -1,6 +1,10 @@
 #!/bin/bash
 #this should probably be a makefile? or some other way of specifying a dependency graph.
 
+#beginning packages
+sudo apt-get update
+sudo apt-get dist-upgrade -yq
+
 #Depends on nothing, others depend on
 bash version_control_setup.sh
 bash install_utilities.sh
