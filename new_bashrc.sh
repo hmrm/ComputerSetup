@@ -133,5 +133,3 @@ PATH=$PATH:~/.scala/bin:~/ComputerSetup/go/bin
 
 #screw rvm and screw the profile/bashrc system
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-xmodmap ~/.xmodmap

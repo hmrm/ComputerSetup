@@ -1,6 +1,7 @@
 #From github/sontek/dotfiles
 
 emacs --daemon &
+xmodmap ~/.xmodmap
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
