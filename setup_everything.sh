@@ -18,8 +18,7 @@ bash install_python.sh
 #Depends on vc, util, java
 bash bash_setup.sh
 bash emacs_setup.sh
-bash install_clojure.sh #TODO: after altering check if this is still ok location
-bash install_common_lisp.sh
+#bash install_clojure.sh #TODO: after altering check if this is still ok location
 sudo bash install_erlang.sh
 sudo bash install_go.sh
 bash install_node.sh
@@ -27,4 +26,9 @@ bash install_scala.sh
 bash install_ruby.sh
 
 #Depends on more
+source ~/.rvm/scripts/rvm
 bash install_css_stuff.sh
+
+#has interaction at end
+bash install_common_lisp.sh
+sudo shutdown -r now
