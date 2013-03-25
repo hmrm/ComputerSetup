@@ -240,13 +240,14 @@
 ;; csv mode setup
 (ensure-installed 'csv-mode)
 (ensure-installed 'csv-nav)
-(add-to-list 'auto-mode-alist  '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+(add-to-list 'auto-mode-alist '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (autoload 'csv-nav-mode "csv-nav" "Major mode for navigating comma-separated value files." t)
 (setq csv-separators '("," ";" "|" " "))
 
 ;;setting markdown
+(ensure-installed 'markdown-mode)
 (add-to-list 'auto-mode-alist '("\\.mkd" . markdown-mode))
-(setq auto-mode-alist '("\\.md" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
 
 ;;setting up ruby
 ; TODO: There is significant rails support that could be added
@@ -262,7 +263,7 @@
 (add-to-list 'auto-mode-alist '("Vagrantfile\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.jbuilder\\'" . ruby-mode))
 (ensure-installed 'yari)
-(ensure-installed 'ruby-inf)
+(ensure-installed 'inf-ruby)
 (ensure-installed 'ruby-end)
 (ensure-installed 'robe)
 (ensure-installed 'auto-complete)
@@ -281,16 +282,17 @@
 
 ;; personal customizations
 (ensure-installed 'dired+)
+(ensure-installed 'rainbow-delimiters)
 
 (display-time-mode 1)
 
-(show-trailing-whitespace)
+(show-ws-toggle-show-trailing-whitespace)
 (dolist (hook '(term-mode-hook comint-mode-hook compilation-mode-hook))
   (add-hook hook
-   (lambda () (setq show-trailing-whitespace nil))))
+	    (lambda () (show-ws-toggle-show-trailing-whitespace))))
 
 (which-function-mode 1) ;TODO
-(rainbow-delimiters 1) ;makes parens et al pretty
+(global-rainbow-delimiters-mode) ;makes parens et al pretty
 (global-unset-key [(control z)])
 (global-unset-key [(control x)(control z)])
 
@@ -339,7 +341,7 @@
 (volatile-highlights-mode t)
 (diminish 'volatile-highlights-mode)
 
-(ensure-installed 'pointback-mode)
+(ensure-installed 'pointback)
 (global-pointback-mode)
 
 (ensure-installed 'ace-jump-mode)
