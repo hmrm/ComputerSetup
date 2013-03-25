@@ -1,3 +1,4 @@
+;;;package --- my personal dot emacs setup
 ;; legend: S = syntax highting I = indentation, A = autocomplete with nice keybinding, a = autocomplete functionality, D = documentation, R = repl, C = compilation, E = error checking
 ;; above slash is implemented, below slash is potentially to be implented
 ;; this syntax is only used for a few packages, others are assumed to be at least SIAE/? unless otherwise noted
@@ -173,14 +174,14 @@
 (require 'epy-bindings)   ;; For my suggested keybindings [optional]
 (epy-setup-checker "pyflakes %f")
 
-;;scheme setup ?SIRA/?DE
-(ensure-installed 'paredit)
-(ensure-installed 'geiser-mode) ;should I be using scheme-complete instead?
-(ensure-installed 'company-mode)
-(add-hook 'scheme-mode-hook (lambda ()
-			      (turn-on-eldoc-mode)
-			      (paredit-mode)
-			      (company-mode)))
+;; ;;scheme setup ?SIRA/?DE
+;; (ensure-installed 'paredit)
+;; (ensure-installed 'geiser-mode) ;should I be using scheme-complete instead?
+;; (ensure-installed 'company-mode)
+;; (add-hook 'scheme-mode-hook (lambda ()
+;; 			      (turn-on-eldoc-mode)
+;; 			      (paredit-mode)
+;; 			      (company-mode)))
 
 ;; common-lisp setup
 ; the lispdoc function from https://github.com/purcell/emacs.d/blob/master/init-common-lisp.el is interesting
@@ -199,7 +200,7 @@
 
 ;; crontab setup
 (ensure-installed 'crontab-mode)
-(add-auto-mode 'crontab-mode "\\.?cron\\(tab\\)?\\'")
+(add-to-list 'auto-mode-alist  '("\\.?cron\\(tab\\)?\\'" . crontab-mode))
 
 ;; scala setup ?SICA/?DE
 (ensure-installed 'scala-mode2)
@@ -222,7 +223,7 @@
 
 ;;setup json
 (ensure-installed 'flymake-json)
-(add-auto-mode 'js-mode "\\.json\\'")
+(add-to-list 'auto-mode-alist '("\\.json\\'" . js-mode))
 (add-hook 'js-mode-hook 'flymake-json-maybe-load)
 (setq js-indent-level preferred-javascript-indent-level)
 
@@ -239,7 +240,7 @@
 ;; csv mode setup
 (ensure-installed 'csv-mode)
 (ensure-installed 'csv-nav)
-(add-auto-mode 'csv-mode "\\.[Cc][Ss][Vv]\\'")
+(add-to-list 'auto-mode-alist  '("\\.[Cc][Ss][Vv]\\'" . csv-mode))
 (autoload 'csv-nav-mode "csv-nav" "Major mode for navigating comma-separated value files." t)
 (setq csv-separators '("," ";" "|" " "))
 
