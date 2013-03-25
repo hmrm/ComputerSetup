@@ -4,6 +4,9 @@
 ;; this syntax is only used for a few packages, others are assumed to be at least SIAE/? unless otherwise noted
 
 ;; Setup Repositories
+
+;;; Code:
+
 (require 'package)
 (add-to-list 'package-archives 
     '("marmalade" .
@@ -318,6 +321,7 @@
 (ensure-installed 'gist)
 (ensure-installed 'guru-mode)
 (require 'guru-mode)
+(global-guru-mode)
 
 (ensure-installed 'ido-ubiquitous)
 (ensure-installed 'smex)
