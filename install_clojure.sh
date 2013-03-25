@@ -1,6 +1,7 @@
 #!/bin/bash
 #install leiningen
 wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
-mv ~/bin #TODO: what am I moving into ~/bin?
+mv lein ~/bin/lein
 chmod a+x ~/bin/lein
-#TODO: figure out how to install clojure
+PATH=$PATH:~/bin
+lein repl :headless &

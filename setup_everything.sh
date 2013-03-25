@@ -22,7 +22,7 @@ bash install_python.sh 2>&1 | tee logipython
 #Depends on vc, util, java
 bash bash_setup.sh 2>&1 | tee logbash
 bash emacs_setup.sh 2>&1 | tee logemacs
-#bash install_clojure.sh #TODO: after altering check if this is still ok location
+bash install_clojure.sh #TODO: after altering check if this is still ok location
 sudo bash install_erlang.sh 2>&1 | tee logierlang
 sudo bash install_go.sh 2>&1 | tee logigo
 bash install_node.sh 2>&1 | tee loginode
