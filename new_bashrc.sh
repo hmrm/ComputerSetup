@@ -124,7 +124,7 @@ _seq ()
 }
 
 # Startup Emacs
-emacs --daemon
+emacsd #emacs --daemon
 EDITOR="emacsclient -c"
 
 #setting up path
