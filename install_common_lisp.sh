@@ -3,7 +3,7 @@ sudo apt-get install sbcl -yq
 git clone git://sbcl.git.sourceforge.net/gitroot/sbcl/sbcl.git
 cd sbcl
 sudo bash make.sh
-sudo apt-get purge sbcl
+sudo apt-get purge sbcl -yq
 sudo bash install.sh
 cd ..
 hash -r
