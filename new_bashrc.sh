@@ -124,7 +124,7 @@ _seq ()
 }
 
 # Startup Emacs
-EDITOR="emacsclient -c"
+export EDITOR="emacsclient -c --alternate-editor=''"
 
 #setting up path
 PATH=$PATH:~/.scala/bin:~/ComputerSetup/go/bin:~/bin

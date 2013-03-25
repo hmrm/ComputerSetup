@@ -1,6 +1,5 @@
 #From github/sontek/dotfiles
 
-emacs --daemon &
 xmodmap ~/.xmodmap
 
 # if running bash
