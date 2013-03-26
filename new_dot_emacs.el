@@ -51,7 +51,7 @@
 ;			    (flyspell-prog-mode) ;TODO: this breaks autocomplete, see if there is an alternative
 			    (yas/minor-mode-off)
 			    (flycheck-mode)
-			    (eldoc-mode)))	;TODO: test this
+			    (turn-on-eldoc-mode)))	;TODO: test this
 
 ;;Language/Filetype Specific Setups
 
