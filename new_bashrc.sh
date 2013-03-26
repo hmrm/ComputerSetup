@@ -127,7 +127,7 @@ _seq ()
 export EDITOR="emacsclient -c --alternate-editor=''"
 
 #setting up path
-PATH=$PATH:~/.scala/bin:~/ComputerSetup/go/bin:~/bin
+PATH=$PATH:~/.scala/bin:~/ComputerSetup/go/bin:~/bin:~/.cabal/bin
 
 [[ $- == *i* ]]   &&   . ~/git-prompt/git-prompt.sh
 
