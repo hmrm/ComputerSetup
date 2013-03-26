@@ -50,7 +50,8 @@
 (add-hook 'prog-mode-hook (lambda ()
 ;			    (flyspell-prog-mode) ;TODO: this breaks autocomplete, see if there is an alternative
 			    (yas/minor-mode-off)
-			    (flycheck-mode))) ;TODO: test this
+			    (flycheck-mode)
+			    (eldoc-mode)))	;TODO: test this
 
 ;;Language/Filetype Specific Setups
 
@@ -85,6 +86,10 @@
 
 ;;lua setup
 (ensure-installed 'lua-mode)
+(add-hook 'lua-mode-hook (lambda ()
+			   (eldoc-mode)
+			   (define-key lua-mode-map (kbd "C-c C-r") 'lua-send-region)
+			   (define-key lua-mode-map (kbd "C-c C-b") 'lua-send-buffer)))
 
 ;;ocaml setup
 (ensure-installed 'tuareg) ;for reasons unclear to me, the ocaml mode is named tuareg. go figure.
@@ -288,6 +293,7 @@
   (require 'erlang-start))
 
 ;; personal customizations
+(setq 'skeleton-pair nil)
 (ensure-installed 'dired+)
 (ensure-installed 'rainbow-delimiters)
 
@@ -303,11 +309,14 @@
 (ensure-installed 'diminish)
 (require 'diminish)
 (eval-after-load "paredit"
-  '(diminish 'paredit-mode " π"))
+  '(diminish 'paredit-mode "π"))
 (eval-after-load "flycheck"
-  '(diminish 'flycheck-mode " ϕ"))
+  '(diminish 'flycheck-mode "φ"))
 (eval-after-load "guru-mode"
-  '(diminish 'guru-mode " グ"))
+  '(diminish 'guru-mode "グ"))
+(eval-after-load "eldoc"
+  '(diminish 'eldoc-mode "ε"))
+
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 (setq uniquify-separator "/")
