@@ -293,7 +293,7 @@
   (require 'erlang-start))
 
 ;; personal customizations
-(setq 'skeleton-pair nil)
+(setq skeleton-pair nil)
 (ensure-installed 'dired+)
 (ensure-installed 'rainbow-delimiters)
 
