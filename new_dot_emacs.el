@@ -110,6 +110,7 @@
 
 ;;D setup
 (ensure-installed 'd-mode)
+(add-to-list 'ac-modes 'd-mode)
 
 ;;xml/html setup
 (add-to-list 'auto-mode-alist '("\\.xml" . nxml-mode))
@@ -135,8 +136,7 @@
 (ensure-installed 'less-css-mode)
 (ensure-installed 'sass-mode)
 (add-hook 'css-mode-hook (lambda ()
-			   (rainbow-mode)
-			   (flycheck-mode)))
+			   (rainbow-mode)))
 
 
 ;;graphviz setup SIaC/E
@@ -299,7 +299,7 @@
 
 (display-time-mode 1)
 
-(show-ws-toggle-show-trailing-whitespace)
+;(show-ws-toggle-show-trailing-whitespace) ;darn is that annoying
 
 (which-function-mode 1) ;TODO
 (global-rainbow-delimiters-mode) ;makes parens et al pretty
@@ -366,7 +366,7 @@
 ;;adding load path
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
-;;setup auto-save directory
+;;setup auto-save directory (I dont think this works)
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
@@ -446,7 +446,7 @@ indent yanked text (with prefix arg don't indent)."
     (let ((transient-mark-mode nil))
     (yank-advised-indent-function (region-beginning) (region-end)))))
 
-;;setup symbol jumping
+;;setup symbol jumping ;TODO test this
 (defun prelude-ido-goto-symbol (&optional symbol-list)
   "Refresh imenu and jump to a place in the buffer using Ido."
   (interactive)
