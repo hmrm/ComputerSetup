@@ -1,14 +1,12 @@
-;;;package --- my personal dot emacs setup
-;; legend: S = syntax highting I = indentation, A = autocomplete with nice keybinding, a = autocomplete functionality, D = documentation, R = repl, C = compilation, E = error checking
-;; above slash is implemented, below slash is potentially to be implented
-;; this syntax is only used for a few packages, others are assumed to be at least SIAE/? unless otherwise noted
-
-;; Setup Repositories
-
+;;; package --- my personal dot emacs setup
+;;; Commentary:
+;; This is relatively terrible, much credit for the good stuff to github/purcell and github/bbatsov
 ;;; Code:
 
+;; setup repositories
+
 (require 'package)
-(add-to-list 'package-archives 
+(add-to-list 'package-archives
     '("marmalade" .
       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
@@ -27,9 +25,9 @@
 (ensure-installed 'auto-complete)
 (require 'auto-complete-config)
 (global-auto-complete-mode t)
-(setq ac-expand-on-auto-complete nil)
-(setq ac-auto-start nil)
+(setq ac-expand-on-auto-complete t)
 (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
+(setq ac-auto-show-menu t)
 (define-key ac-completing-map (kbd "C-n") 'ac-next)
 (define-key ac-completing-map (kbd "C-p") 'ac-previous)
 
@@ -37,7 +35,7 @@
 (add-to-list 'completion-styles 'initials t)
 
 (defun set-auto-complete-as-completion-at-point-function ()
-  (setq completion-at-point-functions '(auto-complete)))
+  (add-to-list 'completion-at-point-functions 'auto-complete))
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (set-default 'ac-sources
              '(ac-source-imenu
@@ -46,19 +44,24 @@
                ac-source-words-in-same-mode-buffers
                ac-source-words-in-all-buffer))
 
+
 ;;All programming language setup
 (ensure-installed 'flycheck)
 (add-hook 'prog-mode-hook (lambda ()
-			    (flyspell-prog-mode)
-			    (flycheck-mode))) ;TODO: test this
+;			    (flyspell-prog-mode) ;TODO: this breaks autocomplete, see if there is an alternative
+			    (yas/minor-mode-off)
+			    (flycheck-mode)
+			    (eldoc-mode)))	;TODO: test this
 
 ;;Language/Filetype Specific Setups
 
 ;;R setup
 (ensure-installed 'ess) ;"Emacs Speaks Statistics"
-(add-to-list 'auto-mode-alist '("\\.r" . R-mode))
-(add-to-list 'auto-mode-alist '("\\.R" . R-mode))
+(require 'ess-site)
+(add-to-list 'auto-mode-alist '("\\.r\\'" . R-mode))
+(add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode))
 (setq-default inferior-R-program-name "R")
+(setq ess-tab-complete-in-script t)
 
 ;;bison/flex setup
 (autoload 'bison-mode "bison-mode.el")
@@ -83,6 +86,10 @@
 
 ;;lua setup
 (ensure-installed 'lua-mode)
+(add-hook 'lua-mode-hook (lambda ()
+			   (eldoc-mode)
+			   (define-key lua-mode-map (kbd "C-c C-r") 'lua-send-region)
+			   (define-key lua-mode-map (kbd "C-c C-b") 'lua-send-buffer)))
 
 ;;ocaml setup
 (ensure-installed 'tuareg) ;for reasons unclear to me, the ocaml mode is named tuareg. go figure.
@@ -193,8 +200,10 @@
 (setq inferior-lisp-program "sbcl") ;use sbcl for lisp
 (load (expand-file-name "~/quicklisp/slime-helper.el")) ;load the quicklisp version of slime stuff
 (add-hook 'lisp-mode-hook (lambda ()
+			    (slime-setup)
 			    (paredit-mode)
 			    (turn-on-eldoc-mode)
+			    (ac-emacs-lisp-mode-setup)
 			    (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)))
 
 ;;perl setup
@@ -249,8 +258,8 @@
 
 ;;setting markdown
 (ensure-installed 'markdown-mode)
-(add-to-list 'auto-mode-alist '("\\.mkd" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.mkd\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;;setting up ruby
 ; TODO: There is significant rails support that could be added
@@ -284,15 +293,13 @@
   (require 'erlang-start))
 
 ;; personal customizations
+(setq skeleton-pair nil)
 (ensure-installed 'dired+)
 (ensure-installed 'rainbow-delimiters)
 
 (display-time-mode 1)
 
 (show-ws-toggle-show-trailing-whitespace)
-(dolist (hook '(term-mode-hook comint-mode-hook compilation-mode-hook))
-  (add-hook hook
-	    (lambda () (show-ws-toggle-show-trailing-whitespace))))
 
 (which-function-mode 1) ;TODO
 (global-rainbow-delimiters-mode) ;makes parens et al pretty
@@ -302,7 +309,13 @@
 (ensure-installed 'diminish)
 (require 'diminish)
 (eval-after-load "paredit"
-  '(diminish 'paredit-mode " π"))
+  '(diminish 'paredit-mode "π"))
+(eval-after-load "flycheck"
+  '(diminish 'flycheck-mode "φ"))
+(eval-after-load "guru-mode"
+  '(diminish 'guru-mode "グ"))
+(eval-after-load "eldoc"
+  '(diminish 'eldoc-mode "ε"))
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
@@ -321,7 +334,7 @@
 (ensure-installed 'gist)
 (ensure-installed 'guru-mode)
 (require 'guru-mode)
-(global-guru-mode)
+(guru-global-mode)
 
 (ensure-installed 'ido-ubiquitous)
 (ensure-installed 'smex)
