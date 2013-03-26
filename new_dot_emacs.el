@@ -25,9 +25,9 @@
 (ensure-installed 'auto-complete)
 (require 'auto-complete-config)
 (global-auto-complete-mode t)
-(setq ac-expand-on-auto-complete nil)
-(setq ac-auto-start nil)
+(setq ac-expand-on-auto-complete t)
 (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
+(setq ac-auto-show-menu t)
 (define-key ac-completing-map (kbd "C-n") 'ac-next)
 (define-key ac-completing-map (kbd "C-p") 'ac-previous)
 
@@ -35,7 +35,7 @@
 (add-to-list 'completion-styles 'initials t)
 
 (defun set-auto-complete-as-completion-at-point-function ()
-  (setq completion-at-point-functions '(auto-complete)))
+  (add-to-list 'completion-at-point-functions 'auto-complete))
 (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 (set-default 'ac-sources
              '(ac-source-imenu
@@ -44,10 +44,12 @@
                ac-source-words-in-same-mode-buffers
                ac-source-words-in-all-buffer))
 
+
 ;;All programming language setup
 (ensure-installed 'flycheck)
 (add-hook 'prog-mode-hook (lambda ()
-			    (flyspell-prog-mode)
+;			    (flyspell-prog-mode) ;TODO: this breaks autocomplete, see if there is an alternative
+			    (yas/minor-mode-off)
 			    (flycheck-mode))) ;TODO: test this
 
 ;;Language/Filetype Specific Setups
@@ -193,8 +195,10 @@
 (setq inferior-lisp-program "sbcl") ;use sbcl for lisp
 (load (expand-file-name "~/quicklisp/slime-helper.el")) ;load the quicklisp version of slime stuff
 (add-hook 'lisp-mode-hook (lambda ()
+			    (slime-setup)
 			    (paredit-mode)
 			    (turn-on-eldoc-mode)
+			    (ac-emacs-lisp-mode-setup)
 			    (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)))
 
 ;;perl setup
@@ -300,7 +304,10 @@
 (require 'diminish)
 (eval-after-load "paredit"
   '(diminish 'paredit-mode " π"))
-
+(eval-after-load "flycheck"
+  '(diminish 'flycheck-mode " ϕ"))
+(eval-after-load "guru-mode"
+  '(diminish 'guru-mode " グ"))
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 (setq uniquify-separator "/")
