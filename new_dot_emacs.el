@@ -1,14 +1,12 @@
-;;;package --- my personal dot emacs setup
-;; legend: S = syntax highting I = indentation, A = autocomplete with nice keybinding, a = autocomplete functionality, D = documentation, R = repl, C = compilation, E = error checking
-;; above slash is implemented, below slash is potentially to be implented
-;; this syntax is only used for a few packages, others are assumed to be at least SIAE/? unless otherwise noted
-
-;; Setup Repositories
-
+;;; package --- my personal dot emacs setup
+;;; Commentary:
+;; This is relatively terrible, much credit for the good stuff to github/purcell and github/bbatsov
 ;;; Code:
 
+;; setup repositories
+
 (require 'package)
-(add-to-list 'package-archives 
+(add-to-list 'package-archives
     '("marmalade" .
       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
@@ -56,9 +54,11 @@
 
 ;;R setup
 (ensure-installed 'ess) ;"Emacs Speaks Statistics"
-(add-to-list 'auto-mode-alist '("\\.r" . R-mode))
-(add-to-list 'auto-mode-alist '("\\.R" . R-mode))
+(require 'ess-site)
+(add-to-list 'auto-mode-alist '("\\.r\\'" . R-mode))
+(add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode))
 (setq-default inferior-R-program-name "R")
+(setq ess-tab-complete-in-script t)
 
 ;;bison/flex setup
 (autoload 'bison-mode "bison-mode.el")
@@ -249,8 +249,8 @@
 
 ;;setting markdown
 (ensure-installed 'markdown-mode)
-(add-to-list 'auto-mode-alist '("\\.mkd" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.mkd\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;;setting up ruby
 ; TODO: There is significant rails support that could be added
@@ -290,9 +290,6 @@
 (display-time-mode 1)
 
 (show-ws-toggle-show-trailing-whitespace)
-(dolist (hook '(term-mode-hook comint-mode-hook compilation-mode-hook))
-  (add-hook hook
-	    (lambda () (show-ws-toggle-show-trailing-whitespace))))
 
 (which-function-mode 1) ;TODO
 (global-rainbow-delimiters-mode) ;makes parens et al pretty
@@ -321,7 +318,7 @@
 (ensure-installed 'gist)
 (ensure-installed 'guru-mode)
 (require 'guru-mode)
-(global-guru-mode)
+(guru-global-mode)
 
 (ensure-installed 'ido-ubiquitous)
 (ensure-installed 'smex)
