@@ -49,6 +49,7 @@
 (ensure-installed 'flycheck)
 (add-hook 'prog-mode-hook (lambda ()
 ;			    (flyspell-prog-mode) ;TODO: this breaks autocomplete, see if there is an alternative
+			    (setq indent-tabs-mode nil)
 			    (yas/minor-mode-off)
 			    (flycheck-mode)
 			    (eldoc-mode)))	;TODO: test this
