@@ -8,7 +8,5 @@ do
     cp -v $x ~/.emacs.d/lisp
 done
 
-cp -v new_dot_emacs.el ~/.emacs
-
 # Assumes git is set up
 git clone https://github.com/gabrielelanaro/emacs-for-python.git ~/.emacs.d/emacs-for-python
