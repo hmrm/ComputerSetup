@@ -29,8 +29,6 @@
 (setq ac-menu-height 3)
 (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
 (setq ac-auto-show-menu t)
-(define-key ac-completing-map (kbd "C-n") 'ac-next)
-(define-key ac-completing-map (kbd "C-p") 'ac-previous)
 
 (setq tab-always-indent 'complete)  ;; use 't when auto-complete is disabled
 (add-to-list 'completion-styles 'initials t)
@@ -50,6 +48,7 @@
 (ensure-installed 'flycheck)
 (add-hook 'prog-mode-hook (lambda ()
 ;			    (flyspell-prog-mode) ;TODO: this breaks autocomplete, see if there is an alternative
+			    (setq indent-tabs-mode nil)
 			    (yas/minor-mode-off)
 			    (flycheck-mode)
 			    (turn-on-eldoc-mode)))	;TODO: test this
