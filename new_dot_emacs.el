@@ -26,6 +26,7 @@
 (require 'auto-complete-config)
 (global-auto-complete-mode t)
 (setq ac-expand-on-auto-complete t)
+(setq ac-menu-height 3)
 (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
 (setq ac-auto-show-menu t)
 (define-key ac-completing-map (kbd "C-n") 'ac-next)
