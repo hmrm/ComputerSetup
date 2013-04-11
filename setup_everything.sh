@@ -2,6 +2,7 @@
 #this should probably be a makefile? or some other way of specifying a dependency graph.
 
 #beginning packages
+bash get_rid_of_stuff.sh | tee loggetrid
 sudo apt-get update 2>&1 | tee loginit1
 sudo apt-get dist-upgrade -yq 2>&1 | tee loginit2
 
