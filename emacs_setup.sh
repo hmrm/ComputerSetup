@@ -9,4 +9,4 @@ do
 done
 
 # Assumes git is set up
-git clone https://github.com/gabrielelanaro/emacs-for-python.git ~/.emacs.d/emacs-for-python
+git clone https://github.com/hmrm/emacs-for-python.git ~/.emacs.d/emacs-for-python
