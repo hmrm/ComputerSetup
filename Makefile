@@ -1,4 +1,4 @@
-.PHONY vim git-prompt
+.PHONY: vim git-prompt
 
 vimrc: vim
 	cp dotfiles/DOTvimrc ~/.vimrc
