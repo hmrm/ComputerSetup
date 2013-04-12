@@ -1,4 +1,4 @@
-.PHONY: bash vim git-prompt
+.PHONY: utils versioncontrol bash vimrc vim git-prompt
 
 utils:
 	bash install/install_utilities.sh
