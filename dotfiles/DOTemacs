@@ -43,6 +43,8 @@
                ac-source-words-in-same-mode-buffers
                ac-source-words-in-all-buffer))
 
+;;Tabs setup
+(setq-default indent-tabs-mode nil)
 
 ;;All programming language setup
 (ensure-installed 'flycheck)
@@ -54,6 +56,9 @@
 			    (turn-on-eldoc-mode)))	;TODO: test this
 
 ;;Language/Filetype Specific Setups
+
+;;C Setup
+(setq c-basic-offset 4)
 
 ;;R setup
 (ensure-installed 'ess) ;"Emacs Speaks Statistics"
