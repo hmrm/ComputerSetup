@@ -143,6 +143,9 @@
 (add-hook 'css-mode-hook (lambda ()
 			   (rainbow-mode)))
 
+;;makefile setup
+(add-hook 'makefile-mode-hook (lambda ()
+                                (setq indent-tabs-mode 1)))
 
 ;;graphviz setup SIaC/E
 (ensure-installed 'graphviz-dot-mode)
