@@ -18,3 +18,11 @@ vim:
 git-prompt: versioncontrol
 	$(MAKE) -C git-prompt
 	$(MAKE) -C git-prompt install
+
+sass: ruby
+	bash install/install_sass.sh
+
+less: node
+	bash install/install_less.sh
+
+cssutils: sass less
