@@ -3,6 +3,9 @@
 utils:
 	bash install/install_utilities.sh
 
+versioncontrol:
+	bash setup/version_control_setup.sh
+
 bash: utils versioncontrol
 	bash setup/bash_setup.sh
 
