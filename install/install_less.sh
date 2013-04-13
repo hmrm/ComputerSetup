@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo npm install -g less
+npm install -g less

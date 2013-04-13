@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo pip install django
+pip install django

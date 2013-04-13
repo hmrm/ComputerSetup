@@ -1,8 +1,8 @@
 #!/bin/bash
 #install leiningen
 wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
-mkdir ~/bin
-mv lein ~/bin
-chmod a+x ~/bin/lein
-PATH=$PATH:~/bin
+mkdir /home/$1/bin
+mv lein /home/$1/bin
+chmod a+x /home/$1/bin/lein
+PATH=$PATH:/home/$1/bin
 lein repl :headless &

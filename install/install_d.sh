@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo apt-get install gdc -yq
+apt-get install gdc -yq

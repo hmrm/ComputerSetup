@@ -8,3 +8,4 @@ export PATH=$ERL_TOP/bin:$PATH
 ./configure
 make
 make install
+cd ..

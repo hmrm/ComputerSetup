@@ -1,10 +1,10 @@
 #!/bin/bash
-sudo apt-get install sbcl -yq
+apt-get install sbcl -yq
 git clone git://sbcl.git.sourceforge.net/gitroot/sbcl/sbcl.git
 cd sbcl
-sudo bash make.sh
-sudo apt-get purge sbcl -yq
-sudo bash install.sh
+bash make.sh
+apt-get purge sbcl -yq
+bash install.sh
 cd ..
 hash -r
 wget http://beta.quicklisp.org/quicklisp.lisp -O ~/quicklisp.lisp
