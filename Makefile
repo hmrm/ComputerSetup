@@ -4,9 +4,38 @@ endif
 
 .PHONY: #TODO: fill this out
 
+#Full installation options
+ubuntu_clean_install: ubuntu_cleanup background_ubuntusimple install
+
+install: gnome languages libraries bash graphical_programs
+
+#Utility Targets
+gnome: install_utilities gnome_setup
+
+languages: install_clojure install_common_lisp install_d install_erlang install_go install_haskell install_java install_lua install_node install_ocaml install_ruby install_scala install_utilities
+
+libraries: install_django install_rails css_utilities install_numpy
+
+graphical_programs: install_chrome install_sublime
+
+bash_core: bash_aliases bashrc dircolors dotprofile screenrc git-prompt
+
+bash: bash_core vim emacs ssh versioncontrol install_utilities
+
+ssh: install_ssh ssh_setup
+
+versioncontrol: install_versioncontrol versioncontrol_setup
+
+vim: vimrc vim
+
+emacs: dotemacs install_emacs emacs_setup xmodmap
+
 ubuntu_cleanup:
 	bash get_rid_of_stuff.sh $(USERNAME)
 
+css_utilities: install_less install_sass
+
+#Dotfile Targets
 bash_aliases: install_emacs install_chrome install_utilities install_python
 	cp -v dotfiles/DOTbash_aliases /home/$(USERNAME)/.bash_aliases
 
@@ -31,6 +60,7 @@ vimrc: install_latex install_vim vim_setup
 xmodmap:
 	cp -v dotfiles/DOTxmodmap /home/$(USERNAME)/.xmodmap
 
+#installation targets
 git-prompt: install_versioncontrol
 	$(MAKE) -C git-prompt
 	$(MAKE) -C git-prompt install
@@ -106,15 +136,13 @@ install_sublime:
 install_utilities:
 	bash install/install_utilities.sh
 
-install_utilities:
-	bash install/install_utilities.sh
-
 install_versioncontrol:
 	bash install/install_versioncontrol.sh
 
 install_vim:
 	bash install/install_vim.sh
 
+#setup targets
 emacs_setup: install_emacs install_versioncontrol install_utilities
 	bash setup/emacs_setup.sh
 
