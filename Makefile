@@ -2,7 +2,7 @@ ifndef USERNAME
 USERNAME := $(shell read -p "User name: " REPLY; echo $$REPLY ; fi )
 endif
 
-.PHONY: utils versioncontrol bash vimrc vim git-prompt
+.PHONY: #TODO: fill this out
 
 ubuntu_cleanup:
 	bash get_rid_of_stuff.sh $(USERNAME)
@@ -87,22 +87,45 @@ install_python:
 install_rails: install_ruby install_utilities
 	su $(USERNAME) -c "gem install rails"
 
+install_ruby: install_utilities versioncontrol_setup
+	bash install/install_ruby.sh $(USERNAME)
+	source /home/.rvm/scripts/rvm
+
+install_sass: install_ruby
+	su $(USERNAME) -c "gem install sass"
+
+install_scala: install_utilities.sh install_java.sh
+	bash install/install_scala.sh $(USERNAME)
+
+install_ssh:
+	bash install/install_ssh.sh
+
+install_sublime:
+	bash install/install_sublime.sh
+
+install_utilities:
+	bash install/install_utilities.sh
+
 install_utilities:
 	bash install/install_utilities.sh
 
 install_versioncontrol:
-	bash setup/version_control_setup.sh
+	bash install/install_versioncontrol.sh
 
-bash: utils versioncontrol
-	bash setup/bash_setup.sh
+install_vim:
+	bash install/install_vim.sh
 
-vim:
-	bash setup/vim_setup.sh
+emacs_setup: install_emacs install_versioncontrol install_utilities
+	bash setup/emacs_setup.sh
 
-sass: ruby
-	bash install/install_sass.sh
+background_ubuntusimple: install_utilities
+	bash setup/setup_background_ubuntu_simple.sh
 
-less: node
-	bash install/install_less.sh
+setup_gnome: install_utilities
+	bash setup/setup_gnome.sh
 
-cssutils: sass less
+ssh_setup: install_utilities
+	bash setup/ssh_setup.sh
+
+versioncontrol_setup: install_versioncontrol
+	bash setup/versioncontrol_setup.sh
