@@ -7,6 +7,34 @@ endif
 ubuntu_cleanup:
 	bash get_rid_of_stuff.sh $(USERNAME)
 
+bash_aliases:
+	cp -v dotfiles/DOTbash_aliases /home/$(USERNAME)/.bash_aliases
+
+bashrc:
+	cp -v dotfiles/DOTbashrc /home/$(USERNAME)/.bashrc
+
+dircolors:
+	cp -v dotfiles/DOTdircolors /home/$(USERNAME)/.dircolors
+
+dotemacs:
+	cp -v dotfiles/DOTemacs /home/$(USERNAME)/.emacs
+
+dotprofile:
+	cp -v dotfiles/DOTprofile /home/$(USERNAME)/.profile
+
+screenrc:
+	cp -v dotfiles/DOTscreenrc /home/$(USERNAME)/.screenrc
+
+vimrc:
+	cp -v dotfiles/DOTvimrc /home/$(USERNAME)/.vimrc
+
+xmodmap:
+	cp -v dotfiles/DOTxmodmap /home/$(USERNAME)/.xmodmap
+
+git-prompt: versioncontrol
+	$(MAKE) -C git-prompt
+	$(MAKE) -C git-prompt install
+
 utils:
 	bash install/install_utilities.sh
 
@@ -21,10 +49,6 @@ vimrc: vim
 
 vim:
 	bash setup/vim_setup.sh
-
-git-prompt: versioncontrol
-	$(MAKE) -C git-prompt
-	$(MAKE) -C git-prompt install
 
 sass: ruby
 	bash install/install_sass.sh
