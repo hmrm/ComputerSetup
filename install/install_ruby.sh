@@ -4,4 +4,3 @@ sudo apt-get purge ruby rubygems -yq
 source ~/.rvm/scripts/rvm
 rvm pkg install openssl
 rvm reinstall all --force
-gem install rails
