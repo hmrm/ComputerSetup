@@ -12,7 +12,7 @@ install: gnome languages libraries bash graphical_programs
 #Utility Targets
 gnome: install_utilities gnome_setup
 
-languages: install_clojure install_common_lisp install_d install_erlang install_go install_haskell install_java install_lua install_node install_ocaml install_ruby install_scala install_utilities
+languages: install_clojure install_common_lisp install_d install_erlang install_go install_haskell install_java install_lua install_node install_python install_ocaml install_ruby install_scala install_utilities
 
 libraries: install_django install_rails css_utilities install_numpy
 
