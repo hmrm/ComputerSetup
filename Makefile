@@ -1,3 +1,7 @@
+ifndef USERNAME
+USERNAME := $(shell read -p "User name: " REPLY; echo $$REPLY ; fi )
+endif
+
 .PHONY: utils versioncontrol bash vimrc vim git-prompt
 
 utils:
