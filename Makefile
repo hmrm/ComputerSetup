@@ -26,7 +26,7 @@ ssh: install_ssh ssh_setup
 
 versioncontrol: install_versioncontrol versioncontrol_setup
 
-vim: vimrc vim
+vim: vimrc install_vim
 
 emacs: dotemacs install_emacs emacs_setup xmodmap
 
@@ -54,7 +54,7 @@ dotprofile: xmodmap
 screenrc:
 	cp -v dotfiles/DOTscreenrc /home/$(USERNAME)/.screenrc
 
-vimrc: install_latex install_vim vim_setup
+vimrc: install_utilities install_vim
 	cp -v dotfiles/DOTvimrc /home/$(USERNAME)/.vimrc
 
 xmodmap:
@@ -124,7 +124,7 @@ install_ruby: install_utilities versioncontrol_setup
 install_sass: install_ruby
 	su $(USERNAME) -c "gem install sass"
 
-install_scala: install_utilities.sh install_java.sh
+install_scala: install_utilities install_java
 	bash install/install_scala.sh $(USERNAME)
 
 install_ssh:
@@ -149,7 +149,7 @@ emacs_setup: install_emacs install_versioncontrol install_utilities
 background_ubuntusimple: install_utilities
 	bash setup/setup_background_ubuntu_simple.sh
 
-setup_gnome: install_utilities
+gnome_setup: install_utilities
 	bash setup/setup_gnome.sh
 
 ssh_setup: install_utilities
