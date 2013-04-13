@@ -1,5 +1,5 @@
-ifndef USERNAME
-USERNAME := $(shell read -p "User name: " REPLY; echo $$REPLY ; fi )
+ifndef COMPSETINSTUSERNAME
+COMPSETINSTUSERNAME := $(shell read -p "User name: " REPLY; echo $$REPLY ; fi )
 endif
 
 .PHONY: #TODO: fill this out
@@ -31,40 +31,40 @@ vim: vimrc install_vim
 emacs: dotemacs install_emacs emacs_setup xmodmap
 
 ubuntu_cleanup:
-	bash get_rid_of_stuff.sh $(USERNAME)
+	bash get_rid_of_stuff.sh $(COMPSETINSTUSERNAME)
 
 css_utilities: install_less install_sass
 
 #Dotfile Targets
 bash_aliases: install_emacs install_chrome install_utilities install_python
-	cp -v dotfiles/DOTbash_aliases /home/$(USERNAME)/.bash_aliases
+	cp -v dotfiles/DOTbash_aliases /home/$(COMPSETINSTUSERNAME)/.bash_aliases
 
 bashrc: install_emacs git-prompt install_ruby
-	cp -v dotfiles/DOTbashrc /home/$(USERNAME)/.bashrc
+	cp -v dotfiles/DOTbashrc /home/$(COMPSETINSTUSERNAME)/.bashrc
 
 dircolors:
-	cp -v dotfiles/DOTdircolors /home/$(USERNAME)/.dircolors
+	cp -v dotfiles/DOTdircolors /home/$(COMPSETINSTUSERNAME)/.dircolors
 
 dotemacs: install_emacs emacs_setup
-	cp -v dotfiles/DOTemacs /home/$(USERNAME)/.emacs
+	cp -v dotfiles/DOTemacs /home/$(COMPSETINSTUSERNAME)/.emacs
 
 dotprofile: xmodmap
-	cp -v dotfiles/DOTprofile /home/$(USERNAME)/.profile
+	cp -v dotfiles/DOTprofile /home/$(COMPSETINSTUSERNAME)/.profile
 
 screenrc:
-	cp -v dotfiles/DOTscreenrc /home/$(USERNAME)/.screenrc
+	cp -v dotfiles/DOTscreenrc /home/$(COMPSETINSTUSERNAME)/.screenrc
 
 vimrc: install_utilities install_vim
-	cp -v dotfiles/DOTvimrc /home/$(USERNAME)/.vimrc
+	cp -v dotfiles/DOTvimrc /home/$(COMPSETINSTUSERNAME)/.vimrc
 
 xmodmap:
-	cp -v dotfiles/DOTxmodmap /home/$(USERNAME)/.xmodmap
+	cp -v dotfiles/DOTxmodmap /home/$(COMPSETINSTUSERNAME)/.xmodmap
 
 #installation targets
 git-prompt: install_versioncontrol
 	$(MAKE) -C git-prompt
 	$(MAKE) -C git-prompt install
-	cp -vr git-prompt /home/$(USERNAME)
+	cp -vr git-prompt /home/$(COMPSETINSTUSERNAME)
 
 install_chrome: install_utilities
 	bash install/install_chrome.sh
@@ -73,7 +73,7 @@ install_clojure: install_utilities install_java
 	bash install/install_clojure.sh
 
 install_common_lisp: install_utilities install_versioncontrol
-	bash install/install_common_lisp.sh $(USERNAME)
+	bash install/install_common_lisp.sh $(COMPSETINSTUSERNAME)
 
 install_django: install_python
 	bash install/install_django.sh
@@ -91,7 +91,7 @@ install_go: install_versioncontrol install_utilities
 	bash install/install_go.sh
 
 install_haskell: 
-	bash install/install_haskell.sh $(USERNAME)
+	bash install/install_haskell.sh $(COMPSETINSTUSERNAME)
 
 install_java:
 	bash install/install_java.sh
@@ -115,17 +115,17 @@ install_python:
 	bash install/install_python.sh
 
 install_rails: install_ruby install_utilities
-	su $(USERNAME) -c "gem install rails"
+	su $(COMPSETINSTUSERNAME) -c "gem install rails"
 
 install_ruby: install_utilities versioncontrol_setup
-	bash install/install_ruby.sh $(USERNAME)
+	bash install/install_ruby.sh $(COMPSETINSTUSERNAME)
 	source /home/.rvm/scripts/rvm
 
 install_sass: install_ruby
-	su $(USERNAME) -c "gem install sass"
+	su $(COMPSETINSTUSERNAME) -c "gem install sass"
 
 install_scala: install_utilities install_java
-	bash install/install_scala.sh $(USERNAME)
+	bash install/install_scala.sh $(COMPSETINSTUSERNAME)
 
 install_ssh:
 	bash install/install_ssh.sh
