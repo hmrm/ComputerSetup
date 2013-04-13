@@ -4,6 +4,9 @@ endif
 
 .PHONY: utils versioncontrol bash vimrc vim git-prompt
 
+ubuntu_cleanup:
+	bash get_rid_of_stuff.sh $(USERNAME)
+
 utils:
 	bash install/install_utilities.sh
 
