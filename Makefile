@@ -67,80 +67,80 @@ git-prompt: install_versioncontrol
 	cp -vr git-prompt /home/$(COMPSETINSTUSERNAME)
 
 install_chrome: install_utilities
-	bash install/install_chrome.sh
+	bash install/chrome.sh
 
 install_clojure: install_utilities install_java
-	bash install/install_clojure.sh
+	bash install/clojure.sh
 
 install_common_lisp: install_utilities install_versioncontrol
-	bash install/install_common_lisp.sh $(COMPSETINSTUSERNAME)
+	bash install/common_lisp.sh $(COMPSETINSTUSERNAME)
 
 install_django: install_python
-	bash install/install_django.sh
+	bash install/django.sh
 
 install_d:
-	bash install/install_d.sh
+	bash install/d.sh
 
 install_emacs:
-	bash install/install_emacs.sh
+	bash install/emacs.sh
 
 install_erlang: install_versioncontrol install_utilities
-	bash install/install_erlang.sh
+	bash install/erlang.sh
 
 install_go: install_versioncontrol install_utilities
-	bash install/install_go.sh
+	bash install/go.sh
 
 install_haskell: 
-	bash install/install_haskell.sh $(COMPSETINSTUSERNAME)
+	bash install/haskell.sh $(COMPSETINSTUSERNAME)
 
 install_java:
-	bash install/install_java.sh
+	bash install/java.sh
 
 install_less: install_node
-	bash install/install_less.sh
+	bash install/less.sh
 
 install_lua:
-	bash install/install_lua.sh
+	bash install/lua.sh
 
 install_node: install_versioncontrol install_utilities
-	bash install/install_node.sh
+	bash install/node.sh
 
 install_numpy: install_python
-	bash install/install_numpy.sh
+	bash install/numpy.sh
 
 install_ocaml:
-	bash install/install_ocaml.sh
+	bash install/ocaml.sh
 
 install_python:
-	bash install/install_python.sh
+	bash install/python.sh
 
 install_rails: install_ruby install_utilities
 	su $(COMPSETINSTUSERNAME) -c "gem install rails"
 
 install_ruby: install_utilities versioncontrol_setup
-	bash install/install_ruby.sh $(COMPSETINSTUSERNAME)
+	bash install/ruby.sh $(COMPSETINSTUSERNAME)
 	source /home/.rvm/scripts/rvm
 
 install_sass: install_ruby
 	su $(COMPSETINSTUSERNAME) -c "gem install sass"
 
 install_scala: install_utilities install_java
-	bash install/install_scala.sh $(COMPSETINSTUSERNAME)
+	bash install/scala.sh $(COMPSETINSTUSERNAME)
 
 install_ssh:
-	bash install/install_ssh.sh
+	bash install/ssh.sh
 
 install_sublime:
-	bash install/install_sublime.sh
+	bash install/sublime.sh
 
 install_utilities:
-	bash install/install_utilities.sh
+	bash install/utilities.sh
 
 install_versioncontrol:
-	bash install/install_versioncontrol.sh
+	bash install/versioncontrol.sh
 
 install_vim:
-	bash install/install_vim.sh
+	bash install/vim.sh
 
 #setup targets
 emacs_setup: install_emacs install_versioncontrol install_utilities
