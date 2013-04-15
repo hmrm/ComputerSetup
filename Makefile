@@ -144,17 +144,17 @@ install_vim:
 
 #setup targets
 emacs_setup: install_emacs install_versioncontrol install_utilities
-	bash setup/emacs_setup.sh
+	bash setup/emacs.sh
 
 background_ubuntusimple: install_utilities
-	bash setup/setup_background_ubuntu_simple.sh
+	bash setup/background_ubuntu_simple.sh
 
 gnome_setup: install_utilities
-	bash setup/setup_gnome.sh
+	bash setup/gnome.sh
 
 ssh_setup: install_utilities
-	bash setup/ssh_setup.sh
+	bash setup/ssh.sh
 
 versioncontrol_setup: install_versioncontrol
-	bash setup/versioncontrol_setup.sh
+	bash setup/versioncontrol.sh
 
