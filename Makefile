@@ -153,7 +153,7 @@ emacs_setup: install_emacs install_versioncontrol install_utilities
 	bash setup/emacs.sh
 
 background_ubuntusimple: install_utilities
-	bash setup/background_ubuntu_simple.sh
+	bash setup/background_ubuntu_simple.sh $(COMPSETINSTUSERNAME)
 
 gnome_setup: install_utilities
 	bash setup/gnome.sh
