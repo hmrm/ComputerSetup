@@ -2,7 +2,13 @@ ifndef COMPSETINSTUSERNAME
 COMPSETINSTUSERNAME := $(shell read -p "User name: " REPLY; echo $$REPLY ; fi )
 endif
 
-.PHONY: ubuntu_clean_install install gnome languages libraries graphical_programs bash_core bash ssh versioncontrol vim emacs ubuntu_cleanup css_utilities bash_aliases bashrc dircolors dotemacs dotprofile screenrc vimrc xmodmap git-prompt install_chrome install_clojure install_common_lisp install_django install_d install_emacs install_erlang install_go install_haskell install_java install_less install_lua install_node install_numpy install_ocaml install_python install_rails install_ruby install_sass install_scala install_ssh install_sublime install_utilities install_versioncontrol install_vim emacs_setup background_ubuntusimple gnome_setup ssh_setup versioncontrol_setup
+.PHONY: install languages libraries
+.PHONY: vim vimrc install_vim emacs dotemacs install_emacs emacs_setup
+.PHONY: bash_core bash bash_aliases bashrc dotprofile dircolors xmodmap ssh install_ssh ssh_setup screenrc
+.PHONY: versioncontrol install_versioncontrol versioncontrol_setup git-prompt
+.PHONY: graphical_programs ubuntu_clean_install ubuntu_cleanup background_ubuntusimple gnome gnome_setup install_sublime install_chrome
+.PHONY: install_utilities css_utilities install_less 
+.PHONY: install_clojure install_common_lisp install_django install_d install_erlang install_go install_haskell install_java install_lua install_node install_numpy install_ocaml install_python install_rails install_ruby install_sass install_scala
 
 #Full installation options
 ubuntu_clean_install: ubuntu_cleanup background_ubuntusimple install
