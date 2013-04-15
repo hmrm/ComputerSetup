@@ -9,6 +9,7 @@ endif
 .PHONY: graphical_programs ubuntu_clean_install ubuntu_cleanup background_ubuntusimple gnome gnome_setup install_sublime install_chrome
 .PHONY: install_utilities css_utilities install_less 
 .PHONY: install_clojure install_common_lisp install_django install_d install_erlang install_go install_haskell install_java install_lua install_node install_numpy install_ocaml install_python install_rails install_ruby install_sass install_scala
+.PHONY: dns_server dns_client install_dns
 
 #Full installation options
 ubuntu_clean_install: ubuntu_cleanup background_ubuntusimple install
@@ -29,6 +30,13 @@ bash_core: bash_aliases bashrc dircolors dotprofile screenrc git-prompt
 bash: bash_core vim emacs ssh versioncontrol install_utilities
 
 ssh: install_ssh ssh_setup
+
+#one or the other, but not both of these, should be invoked. dns_server expects host records to be in ~/addl_hosts
+dns_server: install_dns
+	bash setup/dns_server.sh $(COMPSETINSTUSERNAME)
+
+dns_client: install_dns
+	bash setup/dns_client.sh
 
 versioncontrol: install_versioncontrol versioncontrol_setup
 
@@ -71,6 +79,9 @@ git-prompt: install_versioncontrol
 	$(MAKE) -C git-prompt
 	$(MAKE) -C git-prompt install
 	cp -vr git-prompt /home/$(COMPSETINSTUSERNAME)
+
+install_dns:
+	bash install/dns.sh
 
 install_chrome: install_utilities
 	bash install/chrome.sh
