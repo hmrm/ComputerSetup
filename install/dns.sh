@@ -1,2 +1,2 @@
 #!/bin/bash
-apt-get install dnsmasq
+apt-get install dnsmasq -yq
