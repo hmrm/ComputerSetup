@@ -1,0 +1,3 @@
+Set up github ssh key
+Set up other ssh keys
+Set up dns on dns server
