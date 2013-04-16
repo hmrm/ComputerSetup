@@ -187,3 +187,6 @@ dns_server: install_dns
 dns_client: install_dns
 	bash setup/dns_client.sh
 
+#not included in default install
+ftp_server:
+	bash install/ftp.sh
