@@ -190,3 +190,7 @@ dns_client: install_dns
 #not included in default install
 ftp_server:
 	bash install/ftp.sh
+
+#not included in default install
+media_players:
+	bash install/media_players.sh
