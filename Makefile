@@ -31,13 +31,6 @@ bash: bash_core vim emacs ssh versioncontrol install_utilities
 
 ssh: install_ssh ssh_setup
 
-#one or the other, but not both of these, should be invoked. dns_server expects host records to be in ~/addl_hosts
-dns_server: install_dns
-	bash setup/dns_server.sh $(COMPSETINSTUSERNAME)
-
-dns_client: install_dns
-	bash setup/dns_client.sh
-
 versioncontrol: install_versioncontrol versioncontrol_setup
 
 vim: vimrc install_vim
@@ -80,6 +73,11 @@ git-prompt: install_versioncontrol
 	$(MAKE) -C git-prompt install
 	cp -vr git-prompt /home/$(COMPSETINSTUSERNAME)
 
+#not included in default install
+install_rtorrent:
+	bash install/rtorrent.sh
+
+#not included in default install
 install_dns:
 	bash install/dns.sh
 
@@ -174,4 +172,18 @@ ssh_setup: install_utilities
 
 versioncontrol_setup: install_versioncontrol
 	bash setup/versioncontrol.sh
+
+#utility targets for specific services. Not currently included in the default install
+#not included in default install
+rtorrent: install_rtorrent
+	bash setup/setup_rtorrent.sh $(COMPSETINSTUSERNAME)
+
+#one or the other, but not both of these, should be invoked. dns_server expects host records to be in ~/addl_hosts
+#not included in default install
+dns_server: install_dns
+	bash setup/dns_server.sh $(COMPSETINSTUSERNAME)
+
+#not included in default install
+dns_client: install_dns
+	bash setup/dns_client.sh
 
