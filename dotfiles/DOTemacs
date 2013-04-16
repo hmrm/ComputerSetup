@@ -21,6 +21,12 @@
   (unless (package-installed-p my-package)
     (package-refresh-contents) (package-install my-package)))
 
+;; Setting up modes for specific files
+(add-to-list 'auto-mode-alist '("\\.rtorrent\\.rc\\'" . conf-mode))
+(add-to-list 'auto-mode-alist '("DOTrtorrent\\.rc\\'" . conf-mode))
+(add-to-list 'auto-mode-alist '("DOTemacs\\'" . emacs-lisp-mode))
+(add-to-list 'auto-mode-alist '("DOTbashrc\\'" . shell-script-mode))
+
 ;;autocomplete setup
 (ensure-installed 'auto-complete)
 (require 'auto-complete-config)
