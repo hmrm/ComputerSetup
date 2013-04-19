@@ -308,6 +308,7 @@
 
 ;; personal customizations
 (ensure-installed 'wc-mode)
+(require 'wc-mode)
 (setq skeleton-pair nil)
 (ensure-installed 'dired+)
 (ensure-installed 'rainbow-delimiters)
