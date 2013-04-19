@@ -307,6 +307,7 @@
   (require 'erlang-start))
 
 ;; personal customizations
+(ensure-installed 'wc-mode)
 (setq skeleton-pair nil)
 (ensure-installed 'dired+)
 (ensure-installed 'rainbow-delimiters)
