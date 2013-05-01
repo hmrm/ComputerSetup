@@ -1,19 +1,35 @@
-" VIM mode, not VI mode
-set nocompatible
+set nocompatible "Use vim mode, ffs
 
-" Soft tabs, 4-ist style
+" Soft tabs, 4-ist mode
 set tabstop=4 shiftwidth=4 expandtab
 
-" Incremental search
 set incsearch
-
-" Always show cursor position
 set ruler
+
+""""""""""
+" Vundle "
+""""""""""
+" Turn off filetype off for vundle
+filetype off
+" Enable Vundle
+set rtp+=~/.vim/bundle/vundle
+call vundle#rc()
+
+" Use Vundle to manage Vundle
+Bundle 'gmarik/vundle'
+" Use Vundle to manage ConqueTerm, relies on rson's mirror
+Bundle 'rson/vim-conque'
+" FuzzyFinder does fuzzy matching for search, but requires L9
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+""""""""""""""
+" End Vundle "
+""""""""""""""
+
 
 """""""""""""""
 " Latex-Suite "
 """""""""""""""
-
 " REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
 filetype plugin on
 
@@ -29,7 +45,6 @@ filetype indent on
 " 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
 " The following changes the default filetype back to 'tex':
 let g:tex_flavor='latex'
-
 """""""""""""""""""
 " End Latex-Suite "
 """""""""""""""""""
