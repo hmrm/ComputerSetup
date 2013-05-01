@@ -3,7 +3,7 @@ COMPSETINSTUSERNAME := $(shell read -p "User name: " REPLY; echo $$REPLY ; fi )
 endif
 
 .PHONY: install languages libraries
-.PHONY: vim vimrc install_vim emacs dotemacs install_emacs emacs_setup
+.PHONY: vim vimrc install_vim vim_setup emacs dotemacs install_emacs emacs_setup
 .PHONY: bash_core bash bash_aliases bashrc dotprofile dircolors xmodmap ssh install_ssh ssh_setup screenrc
 .PHONY: versioncontrol install_versioncontrol versioncontrol_setup git-prompt
 .PHONY: graphical_programs ubuntu_clean_install ubuntu_cleanup background_ubuntusimple gnome gnome_setup install_sublime install_chrome
@@ -33,7 +33,7 @@ ssh: install_ssh ssh_setup
 
 versioncontrol: install_versioncontrol versioncontrol_setup
 
-vim: vimrc install_vim
+vim: vimrc install_vim vim_setup
 
 emacs: dotemacs install_emacs emacs_setup xmodmap
 
@@ -160,6 +160,9 @@ install_vim:
 #setup targets
 emacs_setup: install_emacs install_versioncontrol install_utilities
 	bash setup/emacs.sh
+
+vim_setup: vimrc install_vim
+	bash setup/vim.sh
 
 background_ubuntusimple: install_utilities
 	bash setup/background_ubuntu_simple.sh $(COMPSETINSTUSERNAME)
