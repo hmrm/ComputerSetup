@@ -17,4 +17,4 @@ tar xzvf ensime.tar.gz -C ~/.emacs.d
 mv ~/.emacs.d/ensime_2.10.0-0.9.8.9 ~/.emacs.d/ensime
 mkdir ~/.sbt
 mkdir ~/.sbt/plugins
-echo 'addSbtPlugin("org.ensime" % "ensime-sbt-cmd" % "VERSION")' >> ~/.sbt/plugins/plugins.sbt
+echo 'addSbtPlugin("org.ensime" % "ensime-sbt-cmd" % "0.12.2")' >> ~/.sbt/plugins/plugins.sbt
