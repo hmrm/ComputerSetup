@@ -26,6 +26,8 @@
 (add-to-list 'auto-mode-alist '("DOTrtorrent\\.rc\\'" . conf-mode))
 (add-to-list 'auto-mode-alist '("DOTemacs\\'" . emacs-lisp-mode))
 (add-to-list 'auto-mode-alist '("DOTbashrc\\'" . shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\.zsh\\'" . shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\.zsh-theme\\'" . shell-script-mode))
 
 ;;autocomplete setup
 (ensure-installed 'auto-complete)
