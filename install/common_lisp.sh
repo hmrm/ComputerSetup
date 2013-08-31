@@ -1,6 +1,6 @@
 #!/bin/bash
 apt-get install sbcl -yq
-git clone git://sbcl.git.sourceforge.net/gitroot/sbcl/sbcl.git
+git clone http://github.com/sbcl/sbcl
 cd sbcl
 bash make.sh
 apt-get purge sbcl -yq
