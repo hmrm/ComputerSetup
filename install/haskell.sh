@@ -5,4 +5,4 @@ cabal update
 PATH=$PATH:~/.cabal/bin
 cabal install happy alex
 cabal install hlint ghc-mod
-exit
+
