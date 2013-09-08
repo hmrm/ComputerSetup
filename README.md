@@ -1,3 +1,5 @@
+WARNING: This is all seriously borked. Use at your own risk.
+
 #Sources#
 All over the place, but particular thanks to purcell/emacs.d and bbatsov/prelude.
 
