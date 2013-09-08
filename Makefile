@@ -16,6 +16,8 @@ ubuntu_clean_install: ubuntu_cleanup background_ubuntusimple install
 
 install: gnome languages libraries bash graphical_programs
 
+nolanguages_install: gnome bash graphical_programs
+
 #Utility Targets
 gnome: install_utilities gnome_setup
 
