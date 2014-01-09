@@ -1,0 +1,6 @@
+clear Mod1
+clear Mod4
+clear Control
+keycode 133 = Control_L
+add control = Control_L Control_R
+keycode 76 = F11
