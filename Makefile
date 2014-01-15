@@ -87,7 +87,7 @@ install_chrome: install_utilities
 	bash install/chrome.sh
 
 install_clojure: install_utilities install_java
-	bash install/clojure.sh
+	bash install/clojure.sh $(COMPSETINSTUSERNAME)
 
 install_common_lisp: install_utilities install_versioncontrol
 	bash install/common_lisp.sh $(COMPSETINSTUSERNAME)
